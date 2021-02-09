@@ -1,8 +1,8 @@
 <div align="center">
     <p>
-        <rect width="2" height="20" style="fill:rgb(255,0,174)" />
+        <svg><rect width="2" height="20" style="fill:rgb(255,0,174)" /></svg>
         <a href="https://discord.gg/qKHGJXZQSu"><img src="https://discord.com/api/guilds/793810017681276960/widget.png" alt="Discord Server" />
-        <rect width="2" height="20" style="fill:rgb(255,0,174)" />
+        <svg><rect width="2" height="20" style="fill:rgb(255,0,174)" /></svg>
     </p>
 </div>
 
