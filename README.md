@@ -1,9 +1,9 @@
-<div align="center">
-    <p>
-        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
-        <a href="https://discord.gg/qKHGJXZQSu"><img src="https://discord.com/api/guilds/793810017681276960/widget.png" alt="Discord Server" />
-        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
-    </p>
+<div  align="center">
+<p>
+<img  src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+<a  href="https://discord.gg/qKHGJXZQSu"><img  src="https://discord.com/api/guilds/793810017681276960/widget.png"  alt="Discord Server" />
+<img  src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+</p>
 </div>
 
 # nekos-best
@@ -42,4 +42,32 @@ const getHug = function() {
 }
 
 getHug() //https://nekos.best/hug/001.gif
+```
+
+#### Make a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
+
+```js
+const NekoBestClient = require("nekos-best");
+const Discord = require("discord.js");
+
+const discordClient = new Discord.Client();
+const nekoClient = new NekoBestClient();
+
+const TOKEN = ""; //Your bot token, don't share it with anyone!
+const PREFIX = "!"; //Your bot's prefix
+
+discordClient.once("ready", () => {
+    console.log(`Logged in as ${discordClient.user.tag}`);
+})
+
+discordClient.on("message", async (message) => {
+    if (message.author.bot) return;
+    //Check if the user used the !neko command
+    if (message.content.startsWith(`${PREFIX}neko`)) {
+        message.channel.send(await nekoClient.getNekos());
+    }
+})
+
+//Login to Discord
+discordClient.login(TOKEN);
 ```
