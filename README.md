@@ -1,8 +1,8 @@
 <div align="center">
     <p>
-        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+        <rect width="2" height="20" style="fill:rgb(255,0,174)" />
         <a href="https://discord.gg/qKHGJXZQSu"><img src="https://discord.com/api/guilds/793810017681276960/widget.png" alt="Discord Server" />
-        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+        <rect width="2" height="20" style="fill:rgb(255,0,174)" />
     </p>
 </div>
 
