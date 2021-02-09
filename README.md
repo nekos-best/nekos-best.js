@@ -1,4 +1,11 @@
-![](https://dummyimage.com/2x20/ff00ae/ff00ae.png) ![https://discord.gg/qKHGJXZQSu](https://discord.com/api/guilds/793810017681276960/widget.png) ![](https://dummyimage.com/2x20/ff00ae/ff00ae.png)
+<div align="center">
+    <p>
+        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+        <a href="https://discord.gg/qKHGJXZQSu"><img src="https://discord.com/api/guilds/793810017681276960/widget.png" alt="Discord Server" />
+        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+    </p>
+</div>
+
 # nekos-best
 High quality nekos and role-playing GIFs powered by **[nekos.best](https://nekos.best)**!
 This is a basic API wrapper for the **[nekos.best](https://nekos.best)**'s API with built-in typings for our TypeScript folks out there!
