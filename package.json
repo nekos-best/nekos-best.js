@@ -1,7 +1,7 @@
 {
     "name": "nekos-best",
     "version": "1.0.0",
-    "description": "Typescript/TS wrapper for the https://nekos.best API. Supports JavaScript/JS too",
+    "description": "JavaScript/JS wrapper for the https://nekos.best API. Supports TS typings",
     "typings": "index.d.ts",
     "main": "index.js",
     "scripts": {},
@@ -26,12 +26,11 @@
     ],
     "license": "MIT",
     "dependencies": {
-        "@types/centra": "^2.2.0",
         "centra": "^2.4.2"
     },
     "repository": {
-        "type": "git",
-        "url": "https://github.com/thunder04/nekos-best.git"
+        "url": "https://github.com/thunder04/nekos-best.git",
+        "type": "git"
     },
     "bugs": {
         "url": "https://github.com/thunder04/nekos-best/issues"
