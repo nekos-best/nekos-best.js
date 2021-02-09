@@ -1,0 +1,12 @@
+{
+    "name": "nekos-best",
+    "version": "1.0.0",
+    "description": "Typescript/TS wrapper for the https://nekos.best API. Supports JavaScript/JS too",
+    "main": "index.ts",
+    "scripts": {},
+    "author": "thunder04",
+    "license": "ISC",
+    "dependencies": {
+        "@types/node": "^14.14.25"
+    }
+}
