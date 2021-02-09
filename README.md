@@ -20,15 +20,15 @@ Join the official support server **[here](https://discord.gg/qKHGJXZQSu)**
 
 ## Methods
 
-- `getCuddle()`: Get a cuddling GIF
-- `getFeed()`  : Get a feeding GIF
-- `getHug()`   : Get a hugging GIF
-- `getKiss()`  : Get a kissing GIF
+- `getCuddle()` : Get a cuddling GIF
+- `getFeed()` : Get a feeding GIF
+- `getHug()` : Get a hugging GIF
+- `getKiss()` : Get a kissing GIF
 - `getNekos()` : Get a neko GIF
-- `getPat()`   : Get a patting GIF
-- `getPoke()`  : Get a poking GIF
-- `getSlap()`  : Get a slapping GIF
-- `getTickle()`: Get a tickling GIF
+- `getPat()` : Get a patting GIF
+- `getPoke()` : Get a poking GIF
+- `getSlap()` : Get a slapping GIF
+- `getTickle()` : Get a tickling GIF
 
 ## Usage
 
