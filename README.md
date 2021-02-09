@@ -18,9 +18,21 @@ Join the official support server **[here](https://discord.gg/qKHGJXZQSu)**
 
  - This module uses **[`centra`](https://www.npmjs.com/package/centra)** to make the API requests
 
+## Methods
+
+- `getCuddle()`: Get a cuddling GIF
+- `getFeed()`  : Get a feeding GIF
+- `getHug()`   : Get a hugging GIF
+- `getKiss()`  : Get a kissing GIF
+- `getNekos()` : Get a neko GIF
+- `getPat()`   : Get a patting GIF
+- `getPoke()`  : Get a poking GIF
+- `getSlap()`  : Get a slapping GIF
+- `getTickle()`: Get a tickling GIF
+
 ## Usage
 
-#### To get a neko: 
+#### Get a neko:
 ```js
 const NekoBestClient = require("nekos-best");
 const client = new NekoBestClient();
@@ -32,7 +44,7 @@ const getNeko = async function() {
 getNeko() //https://nekos.best/nekos/0001.png
 ```
 
-#### To get a hug GIF:
+#### Get a hug GIF:
 ```js
 const NekoBestClient = require("nekos-best");
 const client = new NekoBestClient();
