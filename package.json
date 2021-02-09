@@ -2,19 +2,45 @@
     "name": "nekos-best",
     "version": "1.0.0",
     "description": "Typescript/TS wrapper for the https://nekos.best API. Supports JavaScript/JS too",
-    "main": "index.ts",
+    "typings": "index.d.ts",
+    "main": "index.js",
     "scripts": {},
-    "author": "thunder04",
+    "author": {
+        "name": "thunder04",
+        "url": "https://github.com/thunder04"
+    },
+    "contributors": [
+        {
+            "url": "https://github.com/Thusuzzee",
+            "name": "Thusuzzee"
+        },
+        {
+            "url": "https://github.com/oriel-beck",
+            "name": "oriel-beck"
+        }
+    ],
+    "keywords": [
+        "neko",
+        "wrapper",
+        "api"
+    ],
     "license": "MIT",
     "dependencies": {
         "@types/centra": "^2.2.0",
-        "@types/node": "^14.14.25",
         "centra": "^2.4.2"
     },
     "repository": {
-        "url": "https://github.com/thunder04/nekos-best"
+        "type": "git",
+        "url": "https://github.com/thunder04/nekos-best.git"
     },
     "bugs": {
         "url": "https://github.com/thunder04/nekos-best/issues"
+    },
+    "devDependencies": {
+        "eslint": "^7.19.0",
+        "eslint-config-standard": "^16.0.2",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^4.2.1"
     }
 }
