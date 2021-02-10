@@ -29,6 +29,7 @@ Join the official support server **[here](https://discord.gg/qKHGJXZQSu)**
 - `getPoke()` : Get a poking GIF
 - `getSlap()` : Get a slapping GIF
 - `getTickle()` : Get a tickling GIF
+- `getRandom()` : Get a random image or GIF
 
 ## Usage
 

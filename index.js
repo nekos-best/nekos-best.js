@@ -15,9 +15,15 @@ class NekoBestClient {
         ENDPOINTS.forEach((endpoint) => {
             this[`get${endpoint[0].toUpperCase() + endpoint.slice(1).toLowerCase()}`] = async function () {
                 return await centra(`${BASE_URL}/${endpoint}`).send().then(resolveOutput).then((res) => res.url)
-                    .catch(() => null)
+                    .catch(() => null);
             }
         })
+
+        this['getRandom'] = async function () {
+            const endpoint = ENDPOINTS[Math.floor(Math.random() * ENDPOINTS.length)];
+            return await centra(`${BASE_URL}/${endpoint}`).send().then(resolveOutput).then((res) => res.url)
+                .catch(() => null);
+        }
     }
 }
 

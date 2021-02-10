@@ -5,14 +5,30 @@
  * * * * You can either use an `async` function and then *`await` the URL* or use the `Promise.then` method.
  * * Visit https://nekos.best/endpoints for a list of all the endpoints.
  */
-export default class NekoBestClient {
-    getCuddle(): Promise<string | null>
-    getFeed(): Promise<string | null>
-    getHug(): Promise<string | null>
-    getKiss(): Promise<string | null>
-    getNekos(): Promise<string | null>
-    getPat(): Promise<string | null>
-    getPoke(): Promise<string | null>
-    getSlap(): Promise<string | null>
-    getTickle(): Promise<string | null>
+declare module 'nekos-best' {
+    class NekoBestClient {
+        constructor(): this;
+        /** Get a cuddling GIF. Returns `null` if an error occured. */
+        getCuddle(): Promise<string | null>;
+        /** Get a feeding GIF. Returns `null` if an error occured. */
+        getFeed(): Promise<string | null>;
+        /** Get a hugging GIF. Returns `null` if an error occured. */
+        getHug(): Promise<string | null>;
+        /** Get a kissing GIF. Returns `null` if an error occured. */
+        getKiss(): Promise<string | null>;
+        /** Get a neko GIF. Returns `null` if an error occured. */
+        getNekos(): Promise<string | null>;
+        /** Get a patting GIF. Returns `null` if an error occured. */
+        getPat(): Promise<string | null>;
+        /** Get a poking GIF. Returns `null` if an error occured. */
+        getPoke(): Promise<string | null>;
+        /** Get a slapping GIF. Returns `null` if an error occured. */
+        getSlap(): Promise<string | null>;
+        /** Get a tickling GIF. Returns `null` if an error occured. */
+        getTickle(): Promise<string | null>;
+        /** Get a random image or GIF. Returns `null` if an error occured. */
+        getRandom(): Promise<string | null>;
+    }
+    
+    export = NekoBestClient;
 }
