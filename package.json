@@ -4,7 +4,6 @@
     "description": "JavaScript/JS wrapper for the https://nekos.best API. Supports TS typings",
     "typings": "index.d.ts",
     "main": "index.js",
-    "scripts": {},
     "author": {
         "name": "thunder04",
         "url": "https://github.com/thunder04"
@@ -20,8 +19,9 @@
         }
     ],
     "keywords": [
-        "neko",
         "wrapper",
+        "nekos",
+        "neko",
         "api"
     ],
     "license": "MIT",
@@ -34,12 +34,5 @@
     },
     "bugs": {
         "url": "https://github.com/thunder04/nekos-best/issues"
-    },
-    "devDependencies": {
-        "eslint": "^7.19.0",
-        "eslint-config-standard": "^16.0.2",
-        "eslint-plugin-import": "^2.22.1",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "^4.2.1"
     }
 }
