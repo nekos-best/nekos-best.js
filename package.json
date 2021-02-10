@@ -1,5 +1,5 @@
 {
-    "name": "nekos-best",
+    "name": "nekos-best.js",
     "version": "1.0.0",
     "description": "JavaScript/JS wrapper for the https://nekos.best API. Supports TS typings",
     "typings": "index.d.ts",

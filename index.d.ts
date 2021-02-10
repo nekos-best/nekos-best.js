@@ -5,9 +5,9 @@
  * * * * You can either use an `async` function and then *`await` the URL* or use the `Promise.then` method.
  * * Visit https://nekos.best/endpoints for a list of all the endpoints.
  */
-declare module 'nekos-best' {
+declare module 'nekos-best.js' {
     class NekoBestClient {
-        constructor(): this;
+        constructor();
         /** Get a cuddling GIF. Returns `null` if an error occured. */
         getCuddle(): Promise<string | null>;
         /** Get a feeding GIF. Returns `null` if an error occured. */
