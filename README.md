@@ -1,8 +1,8 @@
 <div  align="center">
 <p>
-<img  src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
-<a  href="https://discord.gg/qKHGJXZQSu"><img  src="https://discord.com/api/guilds/793810017681276960/widget.png"  alt="Discord Server" />
-<img  src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+<img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
+<a href="https://discord.gg/qKHGJXZQSu"><img src="https://discord.com/api/guilds/793810017681276960/widget.png" alt="Discord Server" />
+<img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /></a>
 </p>
 </div>
 
@@ -20,16 +20,16 @@ Join the official support server **[here](https://discord.gg/qKHGJXZQSu)**
 
 ## Methods
 
+- `getRandom()` : Get a random image or GIF
 - `getCuddle()` : Get a cuddling GIF
-- `getFeed()` : Get a feeding GIF
-- `getHug()` : Get a hugging GIF
+- `getTickle()` : Get a tickling GIF
+- `getSlap()` : Get a slapping GIF
 - `getKiss()` : Get a kissing GIF
-- `getNekos()` : Get a neko GIF
+- `getFeed()` : Get a feeding GIF
 - `getPat()` : Get a patting GIF
 - `getPoke()` : Get a poking GIF
-- `getSlap()` : Get a slapping GIF
-- `getTickle()` : Get a tickling GIF
-- `getRandom()` : Get a random image or GIF
+- `getHug()` : Get a hugging GIF
+- `getNeko()` : Get a neko GIF
 
 ## Usage
 
@@ -51,7 +51,7 @@ const NekoBestClient = require("nekos-best");
 const client = new NekoBestClient();
 
 const getHug = function() {
-	client.getHug().then(gif => console.log(gif))
+	client.getHug().then(console.log)
 }
 
 getHug() //https://nekos.best/hug/001.gif

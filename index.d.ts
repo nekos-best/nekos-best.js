@@ -17,7 +17,7 @@ declare module 'nekos-best' {
         /** Get a kissing GIF. Returns `null` if an error occured. */
         getKiss(): Promise<string | null>;
         /** Get a neko GIF. Returns `null` if an error occured. */
-        getNekos(): Promise<string | null>;
+        getNeko(): Promise<string | null>;
         /** Get a patting GIF. Returns `null` if an error occured. */
         getPat(): Promise<string | null>;
         /** Get a poking GIF. Returns `null` if an error occured. */
