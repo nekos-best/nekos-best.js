@@ -5,14 +5,18 @@
             <img src="https://img.shields.io/discord/793810017681276960?maxAge=3600&style=flat&logo=discord&color=619cf8&logoColor=white" alt="Discord Server" />
         </a>
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
-        <img src="https://img.shields.io/npm/v/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Version" />
+		<a href="https://www.npmjs.com/package/nekos-best.js">
+        	<img src="https://img.shields.io/npm/v/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Version" />
+		</a>
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
-        <img src="https://img.shields.io/npm/dt/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Downloads" />
+		<a href="https://www.npmjs.com/package/nekos-best.js">
+        	<img src="https://img.shields.io/npm/dt/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Downloads" />
+		</a>
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
     </p>
 </div>
 
-# nekos-best.js
+# [nekos-best.js](https://www.npmjs.com/package/nekos-best.js)
 High quality nekos and role-playing GIFs powered by **[nekos.best](https://nekos.best)**!
 This is a basic, lightweight API wrapper for the **[nekos.best](https://nekos.best)**'s API with built-in typings for our TypeScript folks out there!
 
