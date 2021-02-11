@@ -6,10 +6,8 @@
         </a>
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
         <img src="https://img.shields.io/npm/v/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Version" />
-        <!-- 
-            <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
-            <img src="https://img.shields.io/npm/dt/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Downloads" />
-        -->
+        <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
+        <img src="https://img.shields.io/npm/dt/nekos-best.js.svg?maxAge=3600&style=flat&logo=npm&color=ff5540" alt="Downloads" />
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
     </p>
 </div>
