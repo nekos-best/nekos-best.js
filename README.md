@@ -87,7 +87,7 @@ discordClient.on("message", async (message) => {
     if (message.author.bot) return;
     //Check if the user used the !neko command
     if (message.content.startsWith(`${PREFIX}neko`)) {
-        message.channel.send(await nekoClient.getNekos());
+        message.channel.send(await nekoClient.getNeko());
     }
 })
 
