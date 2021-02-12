@@ -8,24 +8,61 @@
 declare module 'nekos-best.js' {
     class NekoBestClient {
         constructor();
-        /** Get a cuddling GIF. Returns `null` if an error occured. */
-        getCuddle(): Promise<string | null>;
-        /** Get a feeding GIF. Returns `null` if an error occured. */
-        getFeed(): Promise<string | null>;
-        /** Get a hugging GIF. Returns `null` if an error occured. */
-        getHug(): Promise<string | null>;
-        /** Get a kissing GIF. Returns `null` if an error occured. */
-        getKiss(): Promise<string | null>;
-        /** Get a neko GIF. Returns `null` if an error occured. */
-        getNeko(): Promise<string | null>;
-        /** Get a patting GIF. Returns `null` if an error occured. */
-        getPat(): Promise<string | null>;
-        /** Get a poking GIF. Returns `null` if an error occured. */
-        getPoke(): Promise<string | null>;
-        /** Get a slapping GIF. Returns `null` if an error occured. */
-        getSlap(): Promise<string | null>;
-        /** Get a tickling GIF. Returns `null` if an error occured. */
-        getTickle(): Promise<string | null>;
+
+        /** Get a cuddling GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getCuddle(10, 23)) })()
+         */
+        getCuddle(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a feeding GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getFeed(10, 23)) })()
+         */
+        getFeed(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a hugging GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getHug(10, 23)) })()
+         */
+        getHug(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a kissing GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getKiss(10, 23)) })()
+         */
+        getKiss(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a neko GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getNeko(10, 23)) })()
+         */
+        getNeko(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a patting GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getPat(10, 23)) })()
+         */
+        getPat(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a poking GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getPoke(10, 23)) })()
+         */
+        getPoke(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a slapping GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getSlap(10, 23)) })()
+         */
+        getSlap(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a tickling GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getTickle(10, 23)) })()
+         */
+        getTickle(min?: number, max?: number): Promise<string | null>;
+
         /** Get a random image or GIF. Returns `null` if an error occured. */
         getRandom(): Promise<string | null>;
     }

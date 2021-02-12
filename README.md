@@ -19,6 +19,7 @@
 # [nekos-best.js](https://www.npmjs.com/package/nekos-best.js)
 High quality nekos and role-playing GIFs powered by **[nekos.best](https://nekos.best)**!
 This is a basic, lightweight API wrapper for the **[nekos.best](https://nekos.best)**'s API with built-in typings for our TypeScript folks out there!
+**[Node LTS](https://nodejs.org/en/download/)** is recommended.
 
 Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 
@@ -49,7 +50,7 @@ const NekoBestClient = require("nekos-best.js");
 const client = new NekoBestClient();
 
 const getNeko = async function() {
-	console.log(await client.getNekos());
+	console.log(await client.getNeko());
 }
 
 getNeko() //https://nekos.best/nekos/0001.png
@@ -76,7 +77,7 @@ const Discord = require("discord.js");
 const discordClient = new Discord.Client();
 const nekoClient = new NekoBestClient();
 
-const TOKEN = ""; //Your bot token, don't share it with anyone!
+const TOKEN = "abc123"; //Your bot's token, don't share it with anyone!
 const PREFIX = "!"; //Your bot's prefix
 
 discordClient.once("ready", () => {
@@ -87,7 +88,7 @@ discordClient.on("message", async (message) => {
     if (message.author.bot) return;
     //Check if the user used the !neko command
     if (message.content.startsWith(`${PREFIX}neko`)) {
-        message.channel.send(await nekoClient.getNekos());
+        message.channel.send(await nekoClient.getNeko());
     }
 })
 
