@@ -44,7 +44,7 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 
 ## Usage
 
-#### Get a neko:
+### Get a neko
 ```js
 const NekoBestClient = require("nekos-best.js");
 const client = new NekoBestClient();
@@ -56,7 +56,7 @@ const getNeko = async function() {
 getNeko() //https://nekos.best/nekos/0001.png
 ```
 
-#### Get a hug GIF:
+### Get a hug GIF
 ```js
 const NekoBestClient = require("nekos-best.js");
 const client = new NekoBestClient();
@@ -68,7 +68,7 @@ const getHug = function() {
 getHug() //https://nekos.best/hug/001.gif
 ```
 
-#### Make a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
+### Make a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
 
 ```js
 const NekoBestClient = require("nekos-best.js");
