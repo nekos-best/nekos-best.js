@@ -33,20 +33,20 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 - `getRandom()` : Get a random image or GIF
 - `getCuddle()` : Get a cuddling GIF
 - `getTickle()` : Get a tickling GIF
+- `getLaugh()` : Get a laughing GIF
 - `getSlap()` : Get a slapping GIF
+- `getSmile()` : Get a smiling GIF
+- `getDance()` : Get a dancing GIF
+- `getSmug()` : Get a smugging GIF
 - `getKiss()` : Get a kissing GIF
 - `getFeed()` : Get a feeding GIF
-- `getLaugh` : Get a laughing GIF
 - `getPat()` : Get a patting GIF
 - `getPoke()` : Get a poking GIF
 - `getHug()` : Get a hugging GIF
-- `getSmile` : Get a smiling GIF
-- `getDance` : Get a dancing GIF
 - `getNeko()` : Get a neko image
-- `getSmug` : Get a smugging GIF
-- `getWave` : Get a waving GIF
-- `getCry` : Get a crying GIF
-- `getBaka` : Get a baka GIF
+- `getWave()` : Get a waving GIF
+- `getCry()` : Get a crying GIF
+- `getBaka()` : Get a baka GIF
 
 ## Usage
 
