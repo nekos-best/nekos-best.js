@@ -75,7 +75,7 @@ declare module 'nekos-best.js' {
          */
         getKiss(min?: number, max?: number): Promise<string | null>;
 
-        /** Get a neko GIF. Returns `null` if an error occured. 
+        /** Get a neko image. Returns `null` if an error occured. 
          * Limit the results you can get by adding `min` and `max` arguments
          * @example (async function() { console.log(await client.getNeko(10, 23)) })()
          */

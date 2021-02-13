@@ -30,17 +30,23 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
  - This module uses **[`centra`](https://www.npmjs.com/package/centra)** to make the API requests
 
 ## Methods
-
 - `getRandom()` : Get a random image or GIF
 - `getCuddle()` : Get a cuddling GIF
 - `getTickle()` : Get a tickling GIF
 - `getSlap()` : Get a slapping GIF
 - `getKiss()` : Get a kissing GIF
 - `getFeed()` : Get a feeding GIF
+- `getLaugh` : Get a laughing GIF
 - `getPat()` : Get a patting GIF
 - `getPoke()` : Get a poking GIF
 - `getHug()` : Get a hugging GIF
-- `getNeko()` : Get a neko GIF
+- `getSmile` : Get a smiling GIF
+- `getDance` : Get a dancing GIF
+- `getNeko()` : Get a neko image
+- `getSmug` : Get a smugging GIF
+- `getWave` : Get a waving GIF
+- `getCry` : Get a crying GIF
+- `getBaka` : Get a baka GIF
 
 ## Usage
 
