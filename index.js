@@ -5,11 +5,11 @@ const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const resolveOutput = (res) => res.json();
 const BASE_URL = "https://nekos.best";
 const ENDPOINTS = [
+    'smile', 'smug', 'tickle',
+    'kiss', 'laugh', 'nekos',
     'baka', 'cry', 'cuddle',
     'dance', 'feed', 'hug',
-    'kiss', 'laugh', 'nekos',
     'pat', 'poke', 'slap',
-    'smile', 'smug', 'tickle',
     'wave'
 ]
 

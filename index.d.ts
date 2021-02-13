@@ -9,6 +9,48 @@ declare module 'nekos-best.js' {
     class NekoBestClient {
         constructor();
 
+        /** Get a waving GIF. Returns `null` if an error occured.
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getWave(5, 10)) })()
+         */
+        getWave(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a smugging GIF. Returns `null` if an error occured.
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getSmug(5, 10)) })()
+         */
+        getSmug(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a smiling GIF. Returns `null` if an error occured.
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getSmile(5, 10)) })()
+         */
+        getSmile(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a laughing GIF. Returns `null` if an error occured.
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getLaugh(5, 10)) })()
+         */
+        getLaugh(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a dancing GIF. Returns `null` if an error occured.
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getDance(5, 10)) })()
+         */
+        getDance(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a crying GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getCry(5, 10)) })()
+         */
+        getCry(min?: number, max?: number): Promise<string | null>;
+
+        /** Get a baka GIF. Returns `null` if an error occured. 
+         * Limit the results you can get by adding `min` and `max` arguments
+         * @example (async function() { console.log(await client.getBaka(5, 10)) })()
+         */
+        getBaka(min?: number, max?: number): Promise<string | null>;
+
         /** Get a cuddling GIF. Returns `null` if an error occured. 
          * Limit the results you can get by adding `min` and `max` arguments
          * @example (async function() { console.log(await client.getCuddle(10, 23)) })()
