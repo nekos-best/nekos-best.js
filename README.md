@@ -27,7 +27,7 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 
 ```npm install nekos-best.js```
 
- - This module uses **[`centra`](https://www.npmjs.com/package/centra)** to make the API requests
+ - This module uses **[`petitio`](https://www.npmjs.com/package/petitio)** to make the API requests
 
 ## Methods
 - `getRandom()` : Get a random image or GIF
