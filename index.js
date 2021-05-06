@@ -1,12 +1,13 @@
-const { deprecate } = require(`util`)
-const petitio = require("petitio")
-
-const message = `In the next version, this function will not exist anymore! There will be only one function instead of multiple potentially unwanted functions to improve the maintenance of the code.`
-
-const forceRng = (x, min = -Infinity, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min);
-const capitalize = (str) => str[ 0 ].toUpperCase() + str.slice(1).toLowerCase();
-const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const BASE_URL = "https://nekos.best";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fetchNeko = void 0;
+const crypto_1 = require("crypto");
+const petitio_1 = __importDefault(require("petitio"));
+const forceRange = (x, min, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min);
+const BASE_PATH = "https://nekos.best";
 const ENDPOINTS = [
     'smile', 'smug', 'tickle',
     'kiss', 'laugh', 'nekos',
@@ -14,40 +15,23 @@ const ENDPOINTS = [
     'dance', 'feed', 'hug',
     'pat', 'poke', 'slap',
     'wave'
-]
-
-class NekoBestClient {
-    constructor () {
-        for (const endpoint of ENDPOINTS) {
-            NekoBestClient.prototype[ endpoint === 'nekos' ? 'getNeko' : `get${capitalize(endpoint)}` ] = deprecate(async function (min = 0, max = Infinity, options = {}) {
-                if (toString.call(min) === '[object Object]') {
-                    options = min;
-                    max = options.max || Infinity;
-                    min = options.min || 0;
-                }
-
-                if (options.amount) options.amount = forceRng(options.amount, 0);
-
-                if (min <= 0 && max === Infinity) {
-                    return await petitio(`${BASE_URL}/${endpoint}${options.amount > 1 ? `?amount=${options.amount}` : ''}`).json().then(obj => obj.url).catch(() => null);
-                }
-
-                const limits = await petitio(`${BASE_URL}/endpoints`).json().then(res => res[ endpoint ]).catch(() => null);
-                if (!limits) return null;
-
-                min = forceRng(min, limits.min, limits.max);
-                max = forceRng(max, limits.min, limits.max);
-
-                return `${BASE_URL}/${endpoint}/${String(rand(min, max)).padStart(String(limits.max).length, '0')}${limits.format}`;
-            }, message)
-        }
-
-        NekoBestClient.prototype[ 'getRandom' ] = async function (options = {}) {
-            if (options.amount) options.amount = forceRng(options.amount, 0);
-            const endpoint = ENDPOINTS[ Math.floor(Math.random() * ENDPOINTS.length) ];
-            return await petitio(`${BASE_URL}/${endpoint}${options.amount > 1 ? `?amount=${options.amount}` : ''}`).json().then(obj => obj.url).catch(() => null);
-        }
+];
+async function fetchNeko(type, opt = {}) {
+    if (!ENDPOINTS.includes(type))
+        throw new Error(`Unknown type ${type}. Available types: ${ENDPOINTS.join(', ')}`);
+    if (opt.amount) {
+        const results = await petitio_1.default(`${BASE_PATH}/${type}?amount=${forceRange(opt.amount, 0)}`).json().then((res) => res.url).catch(() => null);
+        return [].concat(results || []);
     }
+    if (!opt.min || opt.min < 0 || !Number.isSafeInteger(opt.max))
+        return await petitio_1.default(`${BASE_PATH}/${type}`).json().then((res) => res.url).catch(() => null);
+    const limits = await petitio_1.default(`${BASE_PATH}/endpoints`).json().then((res) => res[type]).catch(() => null);
+    if (!limits)
+        return null;
+    opt.max = forceRange(opt.max || 0, Number(limits.min), Number(limits.max));
+    opt.min = forceRange(opt.min, Number(limits.min), Number(limits.max));
+    return `${BASE_PATH}/${type}/${String(crypto_1.randomInt(opt.min, opt.max)).padStart(limits.max.length, '0')}${limits.format}`;
 }
-
-module.exports = NekoBestClient
+exports.fetchNeko = fetchNeko;
+exports.default = fetchNeko;
+;
