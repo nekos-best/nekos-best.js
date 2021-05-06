@@ -1,6 +1,7 @@
 const petitio = require("petitio")
 
 const forceRng = (x, min = -Infinity, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min);
+const capitalize = (str) => str[ 0 ].toUpperCase() + str.slice(1).toLowerCase();
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const BASE_URL = "https://nekos.best";
 const ENDPOINTS = [
@@ -14,9 +15,19 @@ const ENDPOINTS = [
 
 class NekoBestClient {
     constructor () {
-        ENDPOINTS.forEach((endpoint) => {
-            this[ endpoint === 'nekos' ? 'getNeko' : `get${endpoint[ 0 ].toUpperCase() + endpoint.slice(1).toLowerCase()}` ] = async function (min = 0, max = Infinity) {
-                if (min <= 0 && max === Infinity) return await petitio(`${BASE_URL}/${endpoint}`).json().then(({ url }) => url).catch(() => null);
+        for (const endpoint of ENDPOINTS) {
+            NekoBestClient.prototype[ endpoint === 'nekos' ? 'getNeko' : `get${capitalize(endpoint)}` ] = async function (min = 0, max = Infinity, options = {}) {
+                if (toString.call(min) === '[object Object]') {
+                    options = min;
+                    max = options.max || Infinity;
+                    min = options.min || 0;
+                }
+
+                if (options.amount) options.amount = forceRng(options.amount, 0);
+
+                if (min <= 0 && max === Infinity) {
+                    return await petitio(`${BASE_URL}/${endpoint}${options.amount > 1 ? `?amount=${options.amount}` : ''}`).json().then(obj => obj.url).catch(() => null);
+                }
 
                 const limits = await petitio(`${BASE_URL}/endpoints`).json().then(res => res[ endpoint ]).catch(() => null);
                 if (!limits) return null;
@@ -24,13 +35,14 @@ class NekoBestClient {
                 min = forceRng(min, limits.min, limits.max);
                 max = forceRng(max, limits.min, limits.max);
 
-                return `${BASE_URL}/${endpoint}/${`${rand(min, max)}`.padStart(limits.max.length, '0')}${limits.format}`;
+                return `${BASE_URL}/${endpoint}/${String(rand(min, max)).padStart(String(limits.max).length, '0')}${limits.format}`;
             }
-        })
+        }
 
-        this[ 'getRandom' ] = async function () {
+        this[ 'getRandom' ] = async function (options = {}) {
+            if (options.amount) options.amount = forceRng(options.amount, 0);
             const endpoint = ENDPOINTS[ Math.floor(Math.random() * ENDPOINTS.length) ];
-            return await petitio(`${BASE_URL}/${endpoint}`).json().then(({ url }) => url).catch(() => null);
+            return await petitio(`${BASE_URL}/${endpoint}${options.amount > 1 ? `?amount=${options.amount}` : ''}`).json().then(obj => obj.url).catch(() => null);
         }
     }
 }
