@@ -1,7 +1,8 @@
 const { deprecate } = require(`util`)
 const petitio = require("petitio")
 
-const message = `In the next version, this function will not exist anymore! There will be only one function instead of multiple potentially unwanted functions to improve the maintenance of the code.`
+const message = `In the next version, this function will not exist anymore! 
+    There will be only one function instead of multiple potentially unwanted functions. You can try it by installing from the beta branch in GitHub`
 
 const forceRng = (x, min = -Infinity, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min);
 const capitalize = (str) => str[ 0 ].toUpperCase() + str.slice(1).toLowerCase();

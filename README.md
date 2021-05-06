@@ -31,7 +31,7 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 
 | | |
 | ------- | ------- |
-| `WARN` | __**In the next version, these methods will not exist anymore and there will be only one function instead.**__ |
+| `WARN` | __**In the next version, these methods will not exist anymore and there will be only one function instead.**__ You can try the new version by installing from the [beta](https://github.com/thunder04/nekos-best/tree/beta) branch |
 | | |
 
 ## Methods
