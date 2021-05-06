@@ -29,6 +29,11 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 
  - This module uses **[`petitio`](https://www.npmjs.com/package/petitio)** to make the API requests
 
+| | |
+| ------- | ------- |
+| `WARN` | __**In the next version, these methods will not exist anymore and there will be only one function instead.**__ |
+| | |
+
 ## Methods
 - `getRandom()` : Get a random image or GIF
 - `getCuddle()` : Get a cuddling GIF

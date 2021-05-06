@@ -1,4 +1,7 @@
+const { deprecate } = require(`util`)
 const petitio = require("petitio")
+
+const message = `In the next version, this function will not exist anymore! There will be only one function instead of multiple potentially unwanted functions to improve the maintenance of the code.`
 
 const forceRng = (x, min = -Infinity, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min);
 const capitalize = (str) => str[ 0 ].toUpperCase() + str.slice(1).toLowerCase();
@@ -16,7 +19,7 @@ const ENDPOINTS = [
 class NekoBestClient {
     constructor () {
         for (const endpoint of ENDPOINTS) {
-            NekoBestClient.prototype[ endpoint === 'nekos' ? 'getNeko' : `get${capitalize(endpoint)}` ] = async function (min = 0, max = Infinity, options = {}) {
+            NekoBestClient.prototype[ endpoint === 'nekos' ? 'getNeko' : `get${capitalize(endpoint)}` ] = deprecate(async function (min = 0, max = Infinity, options = {}) {
                 if (toString.call(min) === '[object Object]') {
                     options = min;
                     max = options.max || Infinity;
@@ -36,10 +39,10 @@ class NekoBestClient {
                 max = forceRng(max, limits.min, limits.max);
 
                 return `${BASE_URL}/${endpoint}/${String(rand(min, max)).padStart(String(limits.max).length, '0')}${limits.format}`;
-            }
+            }, message)
         }
 
-        this[ 'getRandom' ] = async function (options = {}) {
+        NekoBestClient.prototype[ 'getRandom' ] = async function (options = {}) {
             if (options.amount) options.amount = forceRng(options.amount, 0);
             const endpoint = ENDPOINTS[ Math.floor(Math.random() * ENDPOINTS.length) ];
             return await petitio(`${BASE_URL}/${endpoint}${options.amount > 1 ? `?amount=${options.amount}` : ''}`).json().then(obj => obj.url).catch(() => null);
