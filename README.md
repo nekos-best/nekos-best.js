@@ -29,39 +29,13 @@ Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
 
  - This module uses **[`petitio`](https://www.npmjs.com/package/petitio)** to make the API requests
 
-| | |
-| ------- | ------- |
-| `WARN` | __**In the next version, these methods will not exist anymore and there will be only one function instead.**__ You can try the new version by installing from the [beta](https://github.com/thunder04/nekos-best/tree/beta) branch |
-| | |
-
-## Methods
-- `getRandom()` : Get a random image or GIF
-- `getCuddle()` : Get a cuddling GIF
-- `getTickle()` : Get a tickling GIF
-- `getLaugh()` : Get a laughing GIF
-- `getSlap()` : Get a slapping GIF
-- `getSmile()` : Get a smiling GIF
-- `getDance()` : Get a dancing GIF
-- `getSmug()` : Get a smugging GIF
-- `getKiss()` : Get a kissing GIF
-- `getFeed()` : Get a feeding GIF
-- `getPat()` : Get a patting GIF
-- `getPoke()` : Get a poking GIF
-- `getHug()` : Get a hugging GIF
-- `getNeko()` : Get a neko image
-- `getWave()` : Get a waving GIF
-- `getCry()` : Get a crying GIF
-- `getBaka()` : Get a baka GIF
-
 ## Usage
 
 ### Get a neko
 ```js
-const NekoBestClient = require("nekos-best.js");
-const client = new NekoBestClient();
 
 const getNeko = async function() {
-	console.log(await client.getNeko());
+	console.log(await fetchNeko('nekos'));
 }
 
 getNeko() //https://nekos.best/nekos/0001.png
@@ -69,24 +43,29 @@ getNeko() //https://nekos.best/nekos/0001.png
 
 ### Get a hug GIF
 ```js
-const NekoBestClient = require("nekos-best.js");
-const client = new NekoBestClient();
+const { fetchNeko } = require("nekos-best.js");
 
 const getHug = function() {
-	client.getHug().then(console.log)
+	fetchNeko('hug').then(console.log)
 }
 
 getHug() //https://nekos.best/hug/001.gif
 ```
 
+### Get multiple hug GIFs
+```js
+const { fetchNeko } = require("nekos-best.js");
+
+fetchNeko('hug', { amount: 15 }).then(console.log) //["https://nekos.best/hug/001.gif", "https://nekos.best/hug/002.gif", ..., "https://nekos.best/hug/015.gif"]
+```
+
 ### Make a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
 
 ```js
-const NekoBestClient = require("nekos-best.js");
+const { fetchNeko } = require("nekos-best.js");
 const Discord = require("discord.js");
 
 const discordClient = new Discord.Client();
-const nekoClient = new NekoBestClient();
 
 const TOKEN = "abc123"; //Your bot's token, don't share it with anyone!
 const PREFIX = "!"; //Your bot's prefix
@@ -99,7 +78,7 @@ discordClient.on("message", async (message) => {
     if (message.author.bot) return;
     //Check if the user used the !neko command
     if (message.content.startsWith(`${PREFIX}neko`)) {
-        message.channel.send(await nekoClient.getNeko());
+        message.channel.send(await fetchNeko('nekos'));
     }
 })
 
