@@ -34,5 +34,8 @@
     },
     "bugs": {
         "url": "https://github.com/thunder04/nekos-best/issues"
+    },
+    "devDependencies": {
+        "@types/node": "^15.0.3"
     }
 }
