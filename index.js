@@ -8,7 +8,6 @@ const crypto_1 = require("crypto");
 const petitio_1 = __importDefault(require("petitio"));
 const forceRange = (x, min, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min);
 const BASE_PATH = "https://nekos.best";
-
 const ENDPOINTS = [
     'smile', 'smug', 'tickle',
     'kiss', 'laugh', 'nekos',
@@ -17,7 +16,6 @@ const ENDPOINTS = [
     'pat', 'poke', 'slap',
     'wave'
 ];
-
 async function fetchNeko(type, opt = {}) {
     if (!ENDPOINTS.includes(type))
         throw new Error(`Unknown type ${type}. Available types: ${ENDPOINTS.join(', ')}`);
