@@ -21,7 +21,7 @@ High quality nekos and role-playing GIFs powered by **[nekos.best](https://nekos
 This is a basic, lightweight API wrapper for the **[nekos.best](https://nekos.best)**'s API with built-in typings for our TypeScript folks out there!
 **[Node LTS](https://nodejs.org/en/download/)** is recommended.
 
-Join the official Discord server **[here](https://discord.gg/2NsE7akmM5)**
+Join the official Discord server **[here](https://nekos.best/discord)**
 
 ## Installation
 
