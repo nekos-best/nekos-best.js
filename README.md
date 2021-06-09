@@ -1,7 +1,7 @@
 <div align="center">
     <p>
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" /> 
-        <a href="https://discord.gg/2NsE7akmM5">
+        <a href="https://discord.gg/AsYnNuGcMj">
             <img src="https://img.shields.io/discord/793810017681276960?maxAge=3600&style=flat&logo=discord&color=619cf8&logoColor=white" alt="Discord Server" />
         </a>
         <img src="https://dummyimage.com/2x20/ff00ae/ff00ae.png" />
@@ -21,7 +21,7 @@ High quality nekos and role-playing GIFs powered by **[nekos.best](https://nekos
 This is a basic, lightweight API wrapper for the **[nekos.best](https://nekos.best)**'s API with built-in typings for our TypeScript folks out there!
 **[Node LTS](https://nodejs.org/en/download/)** is recommended.
 
-Join the official Discord server **[here](https://nekos.best/discord)**
+Join the official Discord server **[here](https://nekos.best/discord?ref=js)**
 
 ## Installation
 
