@@ -19,11 +19,11 @@ const ENDPOINTS = [
 async function fetchNeko(type, opt = {}) {
     if (!ENDPOINTS.includes(type))
         throw new Error(`Unknown type ${type}. Available types: ${ENDPOINTS.join(', ')}`);
-    if (opt.amount) {
+    if (typeof opt.amount === 'number') {
         const results = await petitio_1.default(`${BASE_PATH}/${type}?amount=${forceRange(opt.amount, 0)}`).json().then((res) => res.url).catch(() => null);
         return [].concat(results || []);
     }
-    if (!opt.min || opt.min < 0 || !Number.isSafeInteger(opt.max))
+    else if (typeof opt.min !== 'number' || opt.min < 0)
         return await petitio_1.default(`${BASE_PATH}/${type}`).json().then((res) => res.url).catch(() => null);
     const limits = await petitio_1.default(`${BASE_PATH}/endpoints`).json().then((res) => res[type]).catch(() => null);
     if (!limits)
