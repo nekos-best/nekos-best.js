@@ -1,4 +1,3 @@
-import { randomInt } from 'crypto';
 import req from 'petitio';
 
 const forceRange = (x: number, min: number, max = Infinity) => min > max ? 0 : Math.max(Math.min(x, max), min)
@@ -12,30 +11,67 @@ const ENDPOINTS = [
     'wave'
 ] as const;
 
-export async function fetchNeko(type: NBEndpoints, opt: NekosBestOptions = {}): Promise<string[] | string | null> {
-    if (!ENDPOINTS.includes(type)) throw new Error(`Unknown type ${type}. Available types: ${ENDPOINTS.join(', ')}`);
-    if (typeof opt.amount === 'number') {
-        const results = await req(`${BASE_PATH}/${type}?amount=${forceRange(opt.amount, 0)}`).json<{ url: string | string[] }>().then((res) => res.url).catch(() => null);
-        return ([] as string[]).concat(results || [])
-    } else if (
-        typeof opt.min !== 'number' || opt.min < 0
-    ) return await req(`${BASE_PATH}/${type}`).json<NBResult>().then((res) => res.url).catch(() => null);
+const defaultProperties = {
+    artist_href: void 0,
+    artist_name: void 0,
+    source_url: void 0
+}
 
-    const limits = await req(`${BASE_PATH}/endpoints`).json<NBLimits>().then((res) => res[type]).catch(() => null)
+export async function fetchNeko<T extends nbEndpoints>(type: T, amount: number, options?: { min?: number, max?: number }): Promise<GetResType<T>[] | null>
+export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, options?: { min?: number, max?: number }): Promise<GetResType<T> | null>
+export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, { min = -1, max = -1 } = {}): Promise<unknown> {
+    if (!ENDPOINTS.includes(type)) throw new Error(`Unknown type ${type}. Available types: ${ENDPOINTS.join(', ')}`);
+    if (typeof amount !== 'undefined' && typeof amount !== 'number') throw new Error(`Amount has to be a number. Received typeof ${typeof amount}`)
+    if (min > max) [min, max] = [max, min]
+
+    if (typeof amount === 'number') {
+        const response = await req(`${BASE_PATH}/${type}?amount=${forceRange(amount, 0)}`).json<nbResponse<true>>()
+            .then(merge).catch(() => null)
+        if (!response) return null
+        return Array(0).concat(response)
+    }
+
+    if (min < 0 && max < 0) return await req(`${BASE_PATH}/${type}`).json<nbResponse>()
+        .then(merge).catch(() => null)
+
+    const limits = await req(`${BASE_PATH}/endpoints`).json<nbLimits>().then((res) => res[type]).catch(() => null)
     if (!limits) return null
 
-    opt.max = forceRange(opt.max || 0, Number(limits.min), Number(limits.max))
-    opt.min = forceRange(opt.min, Number(limits.min), Number(limits.max))
+    max = forceRange(max || 0, Number(limits.min), Number(limits.max))
+    min = forceRange(min, Number(limits.min), Number(limits.max))
 
-    return `${BASE_PATH}/${type}/${String(randomInt(opt.min, opt.max)).padStart(limits.max.length, '0')}${limits.format}`
+    return { url: `${BASE_PATH}/${type}/${String((Math.random() * max) + min | 0).padStart(limits.max.length, '0')}${limits.format}` }
+}
+
+function merge(response: nbResponse | nbResponse<true>): nbResult | nbResult[] {
+    if (Array.isArray(response.url)) {
+        const details = response.details as nbResponse<true>['details']
+        return response.url.map((url, i) => decode(Object.assign({ url }, details.length ? details[i] || defaultProperties : defaultProperties)))
+    } else return decode(Object.assign({ url: response.url }, response.details || defaultProperties))
+}
+
+function decode<T extends object>(obj: T): T {
+    for (const [k, v] of Object.entries(obj)) obj[k as keyof T] = (v ? decodeURIComponent(v) : void 0) as never
+    return obj
 }
 
 export default fetchNeko;
-export type NBLimits = { [k in NBEndpoints]: { min: string, max: string, format: string } };
-export type NBEndpoints = typeof ENDPOINTS[number];
-export type NBResult = { url: string };
-export interface NekosBestOptions {
-    amount?: number
-    min?: number
-    max?: number
-};
+
+export type nbEndpoints = typeof ENDPOINTS[number]
+export type nbLimits = { [k in nbEndpoints]: { min: string, max: string, format: string } }
+type GetResType<T extends nbEndpoints> = T extends 'nekos'
+    ? Required<nbResult>
+    : nbResult
+
+export interface nbResult extends Partial<nbDetails> { url: string }
+
+interface nbResponse<A extends boolean = false> {
+    details: A extends true ? nbDetails[] : nbDetails | null
+    url: A extends true ? string[] : string
+}
+
+interface nbDetails {
+    artist_href: string
+    artist_name: string
+    source_url: string
+}
