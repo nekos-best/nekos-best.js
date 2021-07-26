@@ -38,7 +38,7 @@ const getNeko = async function() {
 	console.log(await fetchNeko('nekos'));
 }
 
-getNeko() //https://nekos.best/nekos/0001.png
+getNeko() // { url: 'https://nekos.best/nekos/0001.png', artist_href: '···', artist_name: '···', source_url: '···' }
 ```
 
 ### Get a hug GIF
@@ -49,17 +49,17 @@ const getHug = function() {
 	fetchNeko('hug').then(console.log)
 }
 
-getHug() //https://nekos.best/hug/001.gif
+getHug() // { url: 'https://nekos.best/hug/001.gif', artist_href: '···', artist_name: '···', source_url: '···' }
 ```
 
 ### Get multiple hug GIFs
 ```js
 const { fetchNeko } = require("nekos-best.js");
 
-fetchNeko('hug', { amount: 15 }).then(console.log) //["https://nekos.best/hug/001.gif", "https://nekos.best/hug/002.gif", ..., "https://nekos.best/hug/015.gif"]
+fetchNeko('hug', 15).then(console.log) // [ { url: 'https://nekos.best/hug/001.gif', artist_href: '···', artist_name: '···', source_url: '···' }, { url: 'https://nekos.best/hug/002.gif', artist_href: '···', artist_name: '···', source_url: '···' } ... ]
 ```
 
-### Make a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
+### Build a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
 
 ```js
 const { fetchNeko } = require("nekos-best.js");
@@ -67,8 +67,8 @@ const Discord = require("discord.js");
 
 const discordClient = new Discord.Client();
 
-const TOKEN = "abc123"; //Your bot's token, don't share it with anyone!
-const PREFIX = "!"; //Your bot's prefix
+const TOKEN = "abc123";
+const PREFIX = "!";
 
 discordClient.once("ready", () => {
     console.log(`Logged in as ${discordClient.user.tag}`);
