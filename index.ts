@@ -17,11 +17,13 @@ const defaultProperties = {
     source_url: void 0
 }
 
-export async function fetchNeko<T extends nbEndpoints>(type: T, amount: number, options?: { min?: number, max?: number }): Promise<GetResType<T>[] | null>
-export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, options?: { min?: number, max?: number }): Promise<GetResType<T> | null>
+export async function fetchNeko<T extends nbEndpoints>(type: T, amount: number, options?: { min?: number, max?: number }): Promise<nbResult[] | null>
+export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, options?: { min?: number, max?: number }): Promise<nbResult | null>
 export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, { min = -1, max = -1 } = {}): Promise<unknown> {
-    if (!ENDPOINTS.includes(type)) throw new Error(`Unknown type ${type}. Available types: ${ENDPOINTS.join(', ')}`);
-    if (typeof amount !== 'undefined' && typeof amount !== 'number') throw new Error(`Amount has to be a number. Received typeof ${typeof amount}`)
+    if (typeof amount !== 'undefined' && !Number.isSafeInteger(amount)) throw new ArgumentError(amount, 'amount', 'safe integer')
+    if (!ENDPOINTS.includes(type)) throw new ArgumentError(type, 'type', ENDPOINTS.join(', '))
+    if (!Number.isSafeInteger(min)) throw new ArgumentError(min, 'min', 'safe integer')
+    if (!Number.isSafeInteger(max)) throw new ArgumentError(max, 'max', 'safe integer')
     if (min > max) [min, max] = [max, min]
 
     if (typeof amount === 'number') {
@@ -37,10 +39,10 @@ export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number,
     const limits = await req(`${BASE_PATH}/endpoints`).json<nbLimits>().then((res) => res[type]).catch(() => null)
     if (!limits) return null
 
-    max = forceRange(max || 0, Number(limits.min), Number(limits.max))
+    max = forceRange(max, Number(limits.min), Number(limits.max))
     min = forceRange(min, Number(limits.min), Number(limits.max))
 
-    return { url: `${BASE_PATH}/${type}/${String((Math.random() * max) + min | 0).padStart(limits.max.length, '0')}${limits.format}` }
+    return Object.assign({ url: `${BASE_PATH}/${type}/${String(min + Math.random() * (max - min) | 0).padStart(limits.max.length, '0')}${limits.format}` }, defaultProperties)
 }
 
 function merge(response: nbResponse | nbResponse<true>): nbResult | nbResult[] {
@@ -51,17 +53,18 @@ function merge(response: nbResponse | nbResponse<true>): nbResult | nbResult[] {
 }
 
 function decode<T extends object>(obj: T): T {
-    for (const [k, v] of Object.entries(obj)) obj[k as keyof T] = (v ? decodeURIComponent(v) : void 0) as never
+    for (const [k, v] of Object.entries(obj))
+        obj[k as keyof T] = (v ? decodeURIComponent(v) : v) as never
     return obj
 }
 
-export type nbEndpoints = typeof ENDPOINTS[number]
-export type nbLimits = { [k in nbEndpoints]: { min: string, max: string, format: string } }
-type GetResType<T extends nbEndpoints> = T extends 'nekos'
-    ? Required<nbResult>
-    : nbResult
+class ArgumentError extends Error {
+    constructor(arg: any, name: string, type: string) { super(`[${name}] Expected ${type}. Received type of ${typeof arg}`) }
+}
 
+export type nbLimits = { [k in nbEndpoints]: { min: string, max: string, format: string } }
 export interface nbResult extends Partial<nbDetails> { url: string }
+export type nbEndpoints = typeof ENDPOINTS[number]
 
 interface nbResponse<A extends boolean = false> {
     details: A extends true ? nbDetails[] : nbDetails | null
