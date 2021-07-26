@@ -3,20 +3,20 @@
     "version": "3.0.0",
     "description": "Lightweight JavaScript wrapper for the https://nekos.best API with TypeScript typings",
     "typings": "index.d.ts",
-    "main": "index.js",
-    "author": {
-        "name": "thunder04",
-        "url": "https://github.com/thunder04"
+    "files": [
+        "index.*"
+    ],
+    "exports": {
+        "import": "./index.mjs",
+        "require": "./index.js"
     },
+    "license": "MIT",
+    "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
+    "author": "thunder04 (https://github.com/thunder04)",
+    "repository": "github:nekos-best/nekos-best.js",
     "contributors": [
-        {
-            "url": "https://github.com/Thusuzzee",
-            "name": "Thusuzzee"
-        },
-        {
-            "url": "https://github.com/oriel-beck",
-            "name": "oriel-beck"
-        }
+        "oriel-beck (https://github.com/oriel-beck)",
+        "Thusuzzee (https://github.com/Thusuzzee)"
     ],
     "keywords": [
         "wrapper",
@@ -24,18 +24,20 @@
         "neko",
         "api"
     ],
-    "license": "MIT",
+    "scripts": {
+        "prepublish": "npx esbuild index.ts --outfile=index.js --platform=node --bundle --minify --external:petitio --format=cjs",
+        "prepack": "npm run prepublish && npm run types",
+        "types": "tsc --emitDeclarationOnly"
+    },
     "dependencies": {
         "petitio": "^1.2.1"
     },
-    "repository": {
-        "url": "https://github.com/nekos-best/nekos-best.js.git",
-        "type": "git"
-    },
-    "bugs": {
-        "url": "https://github.com/nekos-best/nekos-best.js/issues"
-    },
     "devDependencies": {
-        "@types/node": "^15.0.3"
+        "@types/node": "^15.0.3",
+        "esbuild": "^0.12.16",
+        "typescript": "^4.3.5"
+    },
+    "engines": {
+        "node": ">=12.8.1"
     }
 }

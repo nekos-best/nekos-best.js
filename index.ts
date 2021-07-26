@@ -55,8 +55,6 @@ function decode<T extends object>(obj: T): T {
     return obj
 }
 
-export default fetchNeko;
-
 export type nbEndpoints = typeof ENDPOINTS[number]
 export type nbLimits = { [k in nbEndpoints]: { min: string, max: string, format: string } }
 type GetResType<T extends nbEndpoints> = T extends 'nekos'
