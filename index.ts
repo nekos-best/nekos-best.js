@@ -11,7 +11,7 @@ const ENDPOINTS = [
     'wave'
 ] as const;
 
-export async function fetchNeko<T extends nbEndpoints>(type: T, amount: number, options?: { min?: number, max?: number }): Promise<nbResponseMultiple | null>
+export async function fetchNeko<T extends nbEndpoints>(type: T, amount: number, options?: { min?: number, max?: number }): Promise<nbResponse[] | null>
 export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, options?: { min?: number, max?: number }): Promise<nbResponse | null>
 export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number, { min = -1, max = -1 } = {}): Promise<unknown> {
     if (typeof amount !== 'undefined' && !Number.isSafeInteger(amount)) throw new ArgumentError(amount, 'amount', 'safe integer')
@@ -43,7 +43,6 @@ export type nbLimits = { [k in nbEndpoints]: { min: string, max: string, format:
 export type nbEndpoints = typeof ENDPOINTS[number]
 
 export interface nbResponse extends Partial<nbDetails> { url: string }
-export interface nbResponseMultiple { url: nbResponse[] }
 
 interface nbDetails {
     artist_href: string
