@@ -8,7 +8,11 @@ const ENDPOINTS = [
     'baka', 'cry', 'cuddle',
     'dance', 'feed', 'hug',
     'pat', 'poke', 'slap',
-    'wave'
+    'wave', 'bite', 'blush',
+    'bored', 'facepalm', 'happy',
+    'highfive', 'pout', 'shrug',
+    'sleep', 'stare', 'think',
+    'thumbsup', 'wink'
 ] as const;
 
 export async function fetchNeko<T extends nbEndpoints>(type: T, amount: number, options?: { min?: number, max?: number }): Promise<nbResponse[] | null>
@@ -20,10 +24,10 @@ export async function fetchNeko<T extends nbEndpoints>(type: T, amount?: number,
     if (!Number.isSafeInteger(max)) throw new ArgumentError(max, 'max', 'safe integer')
     if (min > max) [min, max] = [max, min]
 
-    if (typeof amount === 'number') return await req(`${BASE_PATH}/${type}?amount=${forceRange(amount, 0)}`).json()
+    if (typeof amount === 'number') return req(`${BASE_PATH}/${type}?amount=${forceRange(amount, 0)}`).json()
         .catch(() => null)
 
-    if (min < 0 && max < 0) return await req(`${BASE_PATH}/${type}`).json()
+    if (min < 0 && max < 0) return req(`${BASE_PATH}/${type}`).json()
         .catch(() => null)
 
     const limits = await req(`${BASE_PATH}/endpoints`).json<nbLimits>().then((res) => res[type]).catch(() => null)
