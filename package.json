@@ -1,7 +1,7 @@
 {
     "name": "nekos-best.js",
-    "version": "4.0.3",
-    "description": "Lightweight JavaScript wrapper for the https://nekos.best API with TypeScript typings",
+    "version": "4.0.4",
+    "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings",
     "typings": "index.d.ts",
     "files": [
         "index.*"
