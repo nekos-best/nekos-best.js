@@ -46,10 +46,11 @@ class ArgumentError extends Error {
 export type nbLimits = { [k in nbEndpoints]: { min: string, max: string, format: string } }
 export type nbEndpoints = typeof ENDPOINTS[number]
 
-export interface nbResponse extends Partial<nbDetails> { url: string }
+export interface nbResponse {
+    url: string
 
-interface nbDetails {
-    artist_href: string
-    artist_name: string
-    source_url: string
+    artist_href?: string
+    artist_name?: string
+    source_url?: string
+    anime_name?: string
 }
