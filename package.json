@@ -27,7 +27,7 @@
     "scripts": {
         "prepublish": "npx esbuild index.ts --outfile=index.js --platform=node --bundle --minify --keep-names --external:petitio --format=cjs",
         "prepack": "npm run prepublish && npm run types",
-        "types": "tsc --emitDeclarationOnly"
+        "types": "npx tsc --emitDeclarationOnly"
     },
     "dependencies": {
         "petitio": "^1.2.1"
