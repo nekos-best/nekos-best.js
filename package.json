@@ -1,7 +1,7 @@
 {
     "name": "nekos-best.js",
-    "version": "4.0.5",
-    "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings",
+    "version": "4.1.0",
+    "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings.",
     "typings": "index.d.ts",
     "files": [
         "index.*"
@@ -19,22 +19,24 @@
         "Thusuzzee (https://github.com/Thusuzzee)"
     ],
     "keywords": [
-        "wrapper",
         "nekos",
         "neko",
-        "api"
+        "api",
+        "wrapper",
+        "rp",
+        "roleplaying"
     ],
     "scripts": {
-        "prepublish": "npx esbuild index.ts --outfile=index.js --platform=node --bundle --minify --keep-names --external:petitio --format=cjs",
-        "prepack": "npm run prepublish && npm run types",
-        "types": "npx tsc --emitDeclarationOnly"
+        "prepublish": "yarn esbuild index.ts --outfile=index.js --platform=node --bundle --minify --keep-names --external:petitio --format=cjs",
+        "prepack": "yarn prepublish && yarn types",
+        "types": "yarn tsc --emitDeclarationOnly"
     },
     "dependencies": {
-        "petitio": "^1.2.1"
+        "petitio": "^1.4.0"
     },
     "devDependencies": {
-        "@types/node": "^15.0.3",
-        "esbuild": "^0.12.16",
+        "@types/node": "^15.14.9",
+        "esbuild": "^0.12.29",
         "typescript": "^4.3.5"
     },
     "engines": {
