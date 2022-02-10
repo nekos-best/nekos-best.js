@@ -3,7 +3,7 @@
 import req from 'petitio'
 
 const CATEGORIES = ['baka', 'bite', 'blush', 'bored', 'cry', 'cuddle', 'dance', 'facepalm', 'feed', 'happy', 'highfive', 'hug', 'kiss', 'laugh', 'neko', 'pat', 'poke', 'pout', 'shrug', 'slap', 'sleep', 'smile', 'smug', 'stare', 'think', 'thumbsup', 'tickle', 'wave', 'wink'] as const;
-const BASE_URL = "https://nekos.best/v2";
+const BASE_URL = "https://nekos.best/api/v2";
 
 export class Client {
     #endpointMetadata: Record<string, { format: string, min: string, max: string }> | null = null;
