@@ -101,6 +101,8 @@ export class Client {
     }
 }
 
+export default Client;
+
 /**
  * A quick function to fetch a random file URL along with its metadata (if available).
  * 
