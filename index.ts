@@ -1,5 +1,3 @@
-// TODO Add documentation
-
 import req from 'petitio'
 
 const CATEGORIES = ['baka', 'bite', 'blush', 'bored', 'cry', 'cuddle', 'dance', 'facepalm', 'feed', 'happy', 'highfive', 'hug', 'kiss', 'laugh', 'neko', 'pat', 'poke', 'pout', 'shrug', 'slap', 'sleep', 'smile', 'smug', 'stare', 'think', 'thumbsup', 'tickle', 'wave', 'wink'] as const;
@@ -10,6 +8,10 @@ export class Client {
     #endpointTimeout?: NodeJS.Timeout;
     #initialized = false;
 
+    /**
+     * Loads this client and:
+     * * Fetches from `/api/v2/endpoints`
+     */
     async init(): Promise<this> {
         if (this.#initialized) throw new Error('Client has already been initialized.');
 
@@ -19,6 +21,10 @@ export class Client {
         return this;
     }
 
+    /**
+     * Downloads a random file along with its metadata (if available).
+     * @param category The category to download from.
+     */
     async fetchFile(category: NB_CATEGORIES): Promise<NB_BUFFER_RESPONSE> {
         if (this.#endpointMetadata == null) throw new Error("Client has not been initialized. Call the <Client>.init() method.")
         if (!CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
@@ -45,18 +51,29 @@ export class Client {
         };
     }
 
+    /**
+     * Fetches multiple file URLs along with its metadata (if available).
+     * @param category The category to fetch multiple file URLs from.
+     * @param amount The amount of file URLs. It must be an integer between `1 ≤ x ≤ 20`
+     */
     async fetchMultiple(category: NB_CATEGORIES, amount = 5): Promise<NB_RESPONSE> {
         if (!CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
         if (!Number.isSafeInteger(amount)) throw new TypeError(`Expected a safe integer for amount. Got '${amount}'.`);
-        return req(`${BASE_URL}/${category}?amount=${Math.max(Math.min(amount, 20), 1)}`).json<NB_RESPONSE>();
+        return req(`${BASE_URL}/${category}?amount=${Math.max(Math.min(Math.floor(amount), 20), 1)}`).json<NB_RESPONSE>();
     }
 
-    async fetchRandom(category: NB_CATEGORIES): Promise<NB_RESPONSE> {
-        if (!CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
-        return req(`${BASE_URL}/${category}`).json<NB_RESPONSE>();
+    /**
+     * Fetches a random file URL along with its metadata (if available).
+     * @param category The category to fetch the file URL from. If omitted, it picks a random category.
+     */
+    async fetchRandom(category: NB_CATEGORIES | null = null): Promise<NB_RESPONSE> {
+        if (category != null && !CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
+        return req(`${BASE_URL}/${category || CATEGORIES[Math.random() * CATEGORIES.length]}`).json<NB_RESPONSE>();
     }
 
+    /** Fetches from `/api/v2/endpoints`*/
     async fetchEndpoints(): Promise<boolean> {
+        if (!this.#initialized) throw new Error('Client must be already initialized before calling this method.');
         return this.#fetchEndpoints(true);
     }
 
@@ -84,7 +101,13 @@ export class Client {
     }
 }
 
-export async function fetchRandom(category: NB_CATEGORIES) {
+/**
+ * A quick function to fetch a random file URL along with its metadata (if available).
+ * 
+ * If you are going to call this function multiple times, it's better to initialize a new `Client` instead.
+ * @param category The category to fetch the file URL from. If omitted, it picks a random category.
+ */
+export async function fetchRandom(category?: NB_CATEGORIES) {
     return new Client().fetchRandom(category);
 }
 
