@@ -23,56 +23,70 @@ Join the official Discord server **[here](https://nekos.best/discord?ref=js)**
 
 ## Installation
 
-```npm install nekos-best.js```
+`npm install nekos-best.js` | `yarn install nekos-best.js`
 
 ## Usage
 
-### Get a neko
+### Get a random neko image
+
+#### Recommended way
 
 ```js
+import { Client } from "nekos-best.js";
 
-const getNeko = async function() {
- console.log(await fetchNeko('nekos'));
-}
+const nekosBest = new Client();
+await nekosBest.init();
 
-getNeko() // { url: 'https://nekos.best/nekos/0001.png', artist_href: '···', artist_name: '···', source_url: '···' }
+console.log(await nekosBest.fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0138.png' }] }
 ```
 
-### Get a hug GIF
+#### Alternative way
 
 ```js
-const { fetchNeko } = require("nekos-best.js");
+import { fetchRandom } from "nekos-best.js";
 
-fetchNeko('hug').then(console.log) // { url: 'https://nekos.best/hug/001.gif', anime_name: '···' }
+console.log(await fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0247.png' }] }
 ```
 
 ### Get multiple hug GIFs
 
 ```js
-const { fetchNeko } = require("nekos-best.js");
+import { Client } from "nekos-best.js";
 
-fetchNeko('hug', 15).then(console.log) // [ { url: 'https://nekos.best/hug/001.gif', anime_name: '···' }, { url: 'https://nekos.best/hug/006.gif', anime_name: '···' } ··· ]
+const nekosBest = new Client();
+await nekosBest.init();
+
+console.log(await nekosBest.fetchMultiple("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
+```
+
+### Get a random file
+
+```js
+import { Client } from "nekos-best.js";
+
+const nekosBest = new Client();
+await nekosBest.init();
+
+console.log(await nekosBest.fetchFile("neko")); // { artist_href: '···', ···, data: <Buffer> }
 ```
 
 ### Build a simple Discord Bot with [`discord.js`](https://www.npmjs.com/package/discord.js)
 
 ```js
-const { fetchNeko } = require("nekos-best.js");
-const { Client } = require("discord.js");
+import { Client as DiscordClient } from "discord.js";
+import { Client } from "nekos-best.js";
 
 const TOKEN = "************************.******.***************************";
 
-const discordClient = new Client();
-
-discordClient.once("ready", () => {
-    console.log(`Logged in as ${discordClient.user.tag}`);
-})
+const discordClient = new DiscordClient();
+const nekosBest = new Client();
+await nekosBest.init();
 
 discordClient.on("messageCreate", async (message) => {
     if (message.author.bot) return;
 
     if (message.content.startsWith('!neko')) {
-        message.channel.send(await fetchNeko('nekos')).catch(console.error);
+        message.channel.send((await nekosBest.fetchRandom("neko")).results[0].url);
     }
 })
 
