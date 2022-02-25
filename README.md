@@ -91,7 +91,7 @@ discordClient.on("messageCreate", async (message) => {
 discordClient.login(TOKEN);
 ```
 
-## Migration from 4.X.X
+## Migrate from 4.X.X
 
 ### The `fetchNeko(category)` function has been removed in favor of the `<Client>.fetchRandom()` method and its shortcut `fetchRandom()`
 
