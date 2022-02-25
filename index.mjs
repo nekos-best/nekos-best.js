@@ -1,2 +1,4 @@
-import mod from "./index.js"
-export default mod
+import { Client, fetchRandom } from "./index.js";
+
+export { Client, fetchRandom };
+export default Client;
