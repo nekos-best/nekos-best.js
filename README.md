@@ -35,7 +35,6 @@ Join the official Discord server **[here](https://nekos.best/discord?ref=js)**
 import { Client } from "nekos-best.js";
 
 const nekosBest = new Client();
-await nekosBest.init();
 
 console.log(await nekosBest.fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0138.png' }] }
 ```
@@ -54,7 +53,6 @@ console.log(await fetchRandom("neko")); // { results: [{ artist_href: '···', 
 import { Client } from "nekos-best.js";
 
 const nekosBest = new Client();
-await nekosBest.init();
 
 console.log(await nekosBest.fetchMultiple("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
 ```
@@ -92,3 +90,32 @@ discordClient.on("messageCreate", async (message) => {
 
 discordClient.login(TOKEN);
 ```
+
+## Migration from 4.X.X
+
+### The `fetchNeko(category)` function has been removed in favor of the `<Client>.fetchRandom()` method and its shortcut `fetchRandom()`
+
+```diff
+- fetchNeko('category')
++ const nekosBest = new Client();
++ 
++ nekosBest.fetchRandom('category')
+```
+
+```diff
+- fetchNeko('category')
++ fetchRandom('category')
+```
+
+### The optional parameter `amount` of the `fetchNeko()` function has been removed in favor of the `<Client>.fetchMultiple()` method
+
+```diff
+- fetchNeko('category', 15)
++ const nekosBest = new Client();
++ 
++ nekosBest.fetchMultiple('category', 15)
+```
+
+### Other Changes
+
+- The optional options `max` and `min` of the `fetchNeko()` function have been removed
