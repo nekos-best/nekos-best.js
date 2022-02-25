@@ -2,6 +2,7 @@ import req from 'petitio'
 
 const CATEGORIES = ['baka', 'bite', 'blush', 'bored', 'cry', 'cuddle', 'dance', 'facepalm', 'feed', 'happy', 'highfive', 'hug', 'kiss', 'laugh', 'neko', 'pat', 'poke', 'pout', 'shrug', 'slap', 'sleep', 'smile', 'smug', 'stare', 'think', 'thumbsup', 'tickle', 'wave', 'wink'] as const;
 const BASE_URL = "https://nekos.best/api/v2";
+const USER_AGENT = "nekos-best.js / 5.0.0";
 
 export class Client {
     #endpointMetadata: Record<string, { format: string, min: string, max: string }> | null = null;
@@ -35,7 +36,9 @@ export class Client {
             , url = `${BASE_URL}/${category}/${(min + Math.floor(Math.random() * (max - min)))
                 .toString()
                 .padStart(metadata.max.length, '0')}.${metadata.format}`;
-        const response = await req(url).send()
+        const response = await req(url)
+            .header("User-Agent", USER_AGENT)
+            .send()
             , statusCodeKind = (response.statusCode || 0) / 100;
 
         if (statusCodeKind < 2 || statusCodeKind > 3) {
@@ -59,7 +62,9 @@ export class Client {
     async fetchMultiple(category: NB_CATEGORIES, amount = 5): Promise<NB_RESPONSE> {
         if (!CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
         if (!Number.isSafeInteger(amount)) throw new TypeError(`Expected a safe integer for amount. Got '${amount}'.`);
-        return req(`${BASE_URL}/${category}?amount=${Math.max(Math.min(Math.floor(amount), 20), 1)}`).json<NB_RESPONSE>();
+        return req(`${BASE_URL}/${category}?amount=${Math.max(Math.min(Math.floor(amount), 20), 1)}`)
+            .header("User-Agent", USER_AGENT)
+            .json<NB_RESPONSE>();
     }
 
     /**
@@ -68,7 +73,9 @@ export class Client {
      */
     async fetchRandom(category: NB_CATEGORIES | null = null): Promise<NB_RESPONSE> {
         if (category != null && !CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
-        return req(`${BASE_URL}/${category || CATEGORIES[Math.random() * CATEGORIES.length]}`).json<NB_RESPONSE>();
+        return req(`${BASE_URL}/${category || CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]}`)
+            .header("User-Agent", USER_AGENT)
+            .json<NB_RESPONSE>();
     }
 
     /** Fetches from `/api/v2/endpoints`*/
@@ -83,7 +90,9 @@ export class Client {
             this.#endpointTimeout = undefined;
         }
 
-        const response = await req(`${BASE_URL}/endpoints`).send().catch(() => null);
+        const response = await req(`${BASE_URL}/endpoints`)
+            .header("User-Agent", USER_AGENT)
+            .send().catch(() => null);
 
         if (!response || response.statusCode != 200) {
             if (throwOnError) throw new Error(`Couldn't fetch /endpoints. Got status code ${response?.statusCode || null}.`);
