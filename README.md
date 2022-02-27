@@ -27,44 +27,23 @@ Join the official Discord server **[here](https://nekos.best/discord?ref=js)**
 
 ## Usage
 
-### Get a random neko image
-
-#### Recommended way
-
 ```js
-import { Client } from "nekos-best.js";
+import { Client, fetchRandom } from "nekos-best.js";
 
-const nekosBest = new Client();
-
-console.log(await nekosBest.fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0138.png' }] }
-```
-
-#### Alternative way
-
-```js
-import { fetchRandom } from "nekos-best.js";
-
+// You can use the `fetchRandom()` function to fetch a random neko.
 console.log(await fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0247.png' }] }
-```
 
-### Get multiple hug GIFs
-
-```js
-import { Client } from "nekos-best.js";
-
-const nekosBest = new Client();
-
-console.log(await nekosBest.fetchMultiple("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
-```
-
-### Get a random file
-
-```js
-import { Client } from "nekos-best.js";
-
+// Alternatively, you can initialize a new client which offers more features.
 const nekosBest = new Client();
 await nekosBest.init();
 
+// Such as the `<Client>.fetchRandom()` method.
+console.log(await nekosBest.fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0138.png' }] }
+
+// You can use the `<Client>.fetchMultiple()` method to fetch multiple hug GIFs.
+console.log(await nekosBest.fetchMultiple("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
+
+// Or the `<Client>.fetchFile()` method to get a single file.
 console.log(await nekosBest.fetchFile("neko")); // { artist_href: '···', ···, data: <Buffer> }
 ```
 
@@ -73,8 +52,6 @@ console.log(await nekosBest.fetchFile("neko")); // { artist_href: '···', ··
 ```js
 import { Client as DiscordClient } from "discord.js";
 import { Client } from "nekos-best.js";
-
-const TOKEN = "************************.******.***************************";
 
 const discordClient = new DiscordClient();
 const nekosBest = new Client();
@@ -88,7 +65,7 @@ discordClient.on("messageCreate", async (message) => {
     }
 })
 
-discordClient.login(TOKEN);
+discordClient.login("************************.******.***************************");
 ```
 
 ## Migrate from 4.X.X
