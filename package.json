@@ -1,6 +1,6 @@
 {
     "name": "nekos-best.js",
-    "version": "5.0.1",
+    "version": "5.1.0",
     "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings.",
     "typings": "index.d.ts",
     "files": [
