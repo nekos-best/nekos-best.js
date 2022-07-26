@@ -1,6 +1,6 @@
 {
     "name": "nekos-best.js",
-    "version": "5.1.0",
+    "version": "5.2.0",
     "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings.",
     "typings": "index.d.ts",
     "files": [
@@ -27,17 +27,17 @@
         "rp"
     ],
     "scripts": {
-        "build": "yarn esbuild index.ts --outfile=index.js --platform=node --format=cjs --target=esnext",
-        "types": "yarn tsc --emitDeclarationOnly",
-        "prepack": "yarn build && yarn types"
+        "build": "pnpm esbuild index.ts --outfile=index.js --platform=node --format=cjs --target=esnext",
+        "types": "pnpm tsc --emitDeclarationOnly",
+        "prepack": "pnpm build && pnpm types"
     },
     "dependencies": {
         "petitio": "^1.4.0"
     },
     "devDependencies": {
         "@types/node": "^15.14.9",
-        "esbuild": "^0.12.29",
-        "typescript": "^4.3.5"
+        "esbuild": "^0.14.50",
+        "typescript": "^4.7.4"
     },
     "engines": {
         "node": ">=15.14.0"

@@ -23,7 +23,7 @@ Join the official Discord server **[here](https://nekos.best/discord?ref=js)**
 
 ## Installation
 
-`npm install nekos-best.js` | `yarn install nekos-best.js`
+`npm install nekos-best.js` | `yarn add nekos-best.js` | `pnpm install nekos-best.js`
 
 ## Usage
 

@@ -1,8 +1,8 @@
 import req from 'petitio'
 
-const CATEGORIES = ['baka', 'bite', 'blush', 'bored', 'cry', 'cuddle', 'dance', 'facepalm', 'feed', 'happy', 'highfive', 'hug', 'kiss', 'kitsune', 'laugh', 'neko', 'pat', 'poke', 'pout', 'shrug', 'slap', 'sleep', 'smile', 'smug', 'stare', 'think', 'thumbsup', 'tickle', 'wave', 'wink', 'waifu', 'kick', 'handhold', 'punch', 'shoot'] as const;
+const CATEGORIES = ['baka', 'bite', 'blush', 'bored', 'cry', 'cuddle', 'dance', 'facepalm', 'feed', 'happy', 'highfive', 'hug', 'kiss', 'kitsune', 'laugh', 'neko', 'pat', 'poke', 'pout', 'shrug', 'slap', 'sleep', 'smile', 'smug', 'stare', 'think', 'thumbsup', 'tickle', 'wave', 'wink', 'waifu', 'kick', 'handhold', 'punch', 'shoot', 'husbando', 'yeet'] as const;
 const BASE_URL = "https://nekos.best/api/v2";
-const USER_AGENT = "nekos-best.js / 5.0.1";
+const USER_AGENT = "nekos-best.js / 5.2.0";
 
 export class Client {
     #endpointMetadata: Record<string, { format: string, min: string, max: string }> | null = null;
