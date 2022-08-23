@@ -46,7 +46,9 @@ export class Client {
     async fetchFile(category: NB_CATEGORIES): Promise<NB_BUFFER_RESPONSE> {
         if (this.#endpointMetadata == null) {
             throw new Error("Client has not been initialized. Call the <Client>.init() method.");
-        } else if (!CATEGORIES.includes(category)) {
+        }
+
+        if (!CATEGORIES.includes(category)) {
             throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
         }
 
@@ -76,7 +78,9 @@ export class Client {
     async fetchMultiple(category: NB_CATEGORIES, amount = 5): Promise<NB_RESPONSE> {
         if (!CATEGORIES.includes(category)) {
             throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
-        } else if (!Number.isSafeInteger(amount)) {
+        }
+
+        if (!Number.isSafeInteger(amount)) {
             throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
         }
 
