@@ -1,8 +1,25 @@
-import req from 'petitio'
 
-const CATEGORIES = ['baka', 'bite', 'blush', 'bored', 'cry', 'cuddle', 'dance', 'facepalm', 'feed', 'happy', 'highfive', 'hug', 'kiss', 'kitsune', 'laugh', 'neko', 'pat', 'poke', 'pout', 'shrug', 'slap', 'sleep', 'smile', 'smug', 'stare', 'think', 'thumbsup', 'tickle', 'wave', 'wink', 'waifu', 'kick', 'handhold', 'punch', 'shoot', 'husbando', 'yeet'] as const;
-const BASE_URL = "https://nekos.best/api/v2";
-const USER_AGENT = "nekos-best.js / 5.2.0";
+import fetch from "node-fetch";
+
+const CATEGORIES = ["baka", "bite", "blush", "bored", "cry", "cuddle", "dance", "facepalm", "feed", "happy", "highfive", "hug", "kiss", "kitsune", "laugh", "neko", "pat", "poke", "pout", "shrug", "slap", "sleep", "smile", "smug", "stare", "think", "thumbsup", "tickle", "wave", "wink", "waifu", "kick", "handhold", "punch", "shoot", "husbando", "yeet"] as const;
+
+async function fetchPath(path: string) {
+    const response = await fetch(`https://nekos.best/api/v2/${path}`, {
+        headers: { "User-Agent": "nekos-best.js / 5.3.0" },
+        redirect: "follow",
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch "${path}". Got status code ${response.status}.`);
+    }
+
+    return response;
+}
+
+async function fetchJson<T>(path: string): Promise<T> {
+    const response = await fetchPath(path);
+    return await response.json() as T;
+}
 
 export class Client {
     #endpointMetadata: Record<string, { format: string, min: string, max: string }> | null = null;
@@ -14,7 +31,7 @@ export class Client {
      * * Fetches from `/api/v2/endpoints`
      */
     async init(): Promise<this> {
-        if (this.#initialized) throw new Error('Client has already been initialized.');
+        if (this.#initialized) throw new Error("Client has already been initialized.");
 
         await this.#fetchEndpoints(true);
         this.#initialized = true;
@@ -27,30 +44,27 @@ export class Client {
      * @param category The category to download from.
      */
     async fetchFile(category: NB_CATEGORIES): Promise<NB_BUFFER_RESPONSE> {
-        if (this.#endpointMetadata == null) throw new Error("Client has not been initialized. Call the <Client>.init() method.")
-        if (!CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
-
-        const metadata = this.#endpointMetadata[category]!
-            , min = Number(metadata.min)
-            , max = Number(metadata.max)
-            , url = `${BASE_URL}/${category}/${(min + Math.floor(Math.random() * (max - min)))
-                .toString()
-                .padStart(metadata.max.length, '0')}.${metadata.format}`;
-        const response = await req(url)
-            .header("User-Agent", USER_AGENT)
-            .send()
-            , statusCodeKind = (response.statusCode || 0) / 100;
-
-        if (statusCodeKind < 2 || statusCodeKind > 3) {
-            throw new Error(`Resource unavailable. Got status code ${response.statusCode}.`);
+        if (this.#endpointMetadata == null) {
+            throw new Error("Client has not been initialized. Call the <Client>.init() method.");
+        } else if (!CATEGORIES.includes(category)) {
+            throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
         }
 
+        const metadata = this.#endpointMetadata[category]!;
+        const min = Number(metadata.min);
+        const max = Number(metadata.max);
+        const response = await fetchPath(
+            `${category}/${(min + Math.floor(Math.random() * (max - min)))
+                .toString()
+                .padStart(metadata.max.length, "0")}.${metadata.format}`
+        );
+
         return {
-            artist_href: response.headers['artist_href'],
-            anime_name: response.headers['anime_name'],
-            source_url: response.headers['source_url'],
-            artist_name: response.headers['artist_name'],
-            data: response.body
+            artist_href: response.headers.get("artist_href")!,
+            anime_name: response.headers.get("anime_name")!,
+            source_url: response.headers.get("source_url")!,
+            artist_name: response.headers.get("artist_name")!,
+            data: Buffer.from(await response.arrayBuffer()),
         };
     }
 
@@ -60,11 +74,13 @@ export class Client {
      * @param amount The amount of file URLs. It must be an integer between `1 ≤ x ≤ 20`
      */
     async fetchMultiple(category: NB_CATEGORIES, amount = 5): Promise<NB_RESPONSE> {
-        if (!CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
-        if (!Number.isSafeInteger(amount)) throw new TypeError(`Expected a safe integer for amount. Got '${amount}'.`);
-        return req(`${BASE_URL}/${category}?amount=${Math.max(Math.min(Math.floor(amount), 20), 1)}`)
-            .header("User-Agent", USER_AGENT)
-            .json<NB_RESPONSE>();
+        if (!CATEGORIES.includes(category)) {
+            throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
+        } else if (!Number.isSafeInteger(amount)) {
+            throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
+        }
+
+        return fetchJson<NB_RESPONSE>(`${category}?amount=${Math.max(Math.min(Math.floor(amount), 20), 1)}`);
     }
 
     /**
@@ -72,15 +88,19 @@ export class Client {
      * @param category The category to fetch the file URL from. If omitted, it picks a random category.
      */
     async fetchRandom(category: NB_CATEGORIES | null = null): Promise<NB_RESPONSE> {
-        if (category != null && !CATEGORIES.includes(category)) throw new TypeError(`'${category}' is not a valid category. Available categories: ${CATEGORIES.join(', ')}`);
-        return req(`${BASE_URL}/${category || CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]}`)
-            .header("User-Agent", USER_AGENT)
-            .json<NB_RESPONSE>();
+        if (category != null && !CATEGORIES.includes(category)) {
+            throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
+        }
+
+        return fetchJson<NB_RESPONSE>(category || CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]);
     }
 
     /** Fetches from `/api/v2/endpoints`*/
     async fetchEndpoints(): Promise<boolean> {
-        if (!this.#initialized) throw new Error('Client must be already initialized before calling this method.');
+        if (!this.#initialized) {
+            throw new Error("Client must be already initialized before calling this method.");
+        }
+
         return this.#fetchEndpoints(true);
     }
 
@@ -90,17 +110,9 @@ export class Client {
             this.#endpointTimeout = undefined;
         }
 
-        const response = await req(`${BASE_URL}/endpoints`)
-            .header("User-Agent", USER_AGENT)
-            .send().catch(() => null);
-
-        if (!response || response.statusCode != 200) {
-            if (throwOnError) throw new Error(`Couldn't fetch /endpoints. Got status code ${response?.statusCode || null}.`);
-            return false;
-        }
-
-        try { this.#endpointMetadata = response.json(); }
-        catch (err) {
+        try {
+            this.#endpointMetadata = await fetchJson("endpoints");
+        } catch (err) {
             if (throwOnError) throw err;
             return false;
         }
