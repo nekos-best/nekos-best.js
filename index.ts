@@ -45,7 +45,7 @@ export type NB_BUFFER_RESPONSE = {
  * @param category The category to fetch the file URL from. If omitted, it picks a random category.
  */
 export async function fetchRandom(category?: NB_CATEGORIES) {
-    return new Client().fetch(category);
+    return new Client().fetch(category, 1);
 }
 
 export default Client;
@@ -111,7 +111,7 @@ export class Client {
      * @param category Category of assets. Set to `null` to pick a random category.
      * @param amount The amount of assets. Refer to the documentation for the limits.
      */
-    async fetch(category: Nullable<NB_CATEGORIES> = null, amount = 1): Promise<NB_RESPONSE> {
+    async fetch(category: Nullable<NB_CATEGORIES> = null, amount: number): Promise<NB_RESPONSE> {
         if (!category) {
             category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
         }
