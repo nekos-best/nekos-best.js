@@ -18,6 +18,11 @@ const CATEGORIES = [
 ] as const;
 
 type Nullable<T> = T | undefined | null;
+type EndpointMetadata = Record<string, {
+    format: string;
+    min: string;
+    max: string;
+}>;
 
 export type NB_CATEGORIES = typeof CATEGORIES[number];
 export type NB_RESPONSE = {
@@ -50,22 +55,7 @@ export async function fetchRandom(category?: NB_CATEGORIES) {
 
 export default Client;
 export class Client {
-    #endpointMetadata: Record<string, { format: string, min: string, max: string }> | null = null;
-    #endpointTimeout?: NodeJS.Timeout;
-    #initialized = false;
-
-    /**
-     * Loads this client and:
-     * * Fetches from `/api/v2/endpoints`
-     */
-    async init(): Promise<this> {
-        if (this.#initialized) throw new Error("Client has already been initialized.");
-
-        await this.#fetchEndpoints(true);
-        this.#initialized = true;
-
-        return this;
-    }
+    #endpointMetadata: EndpointMetadata | null = null;
 
     /**
      * Fetches and downloads a random file with its metadata (if available).
@@ -77,17 +67,18 @@ export class Client {
      * @param category The category to download from.
      */
     async fetchFile(category: NB_CATEGORIES): Promise<NB_BUFFER_RESPONSE> {
-        if (this.#endpointMetadata == null) {
-            throw new Error("Client has not been initialized. Call the <Client>.init() method.");
-        }
-
         if (!CATEGORIES.includes(category)) {
             throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
+        }
+
+        if (!this.#endpointMetadata) {
+            this.#endpointMetadata = await fetchJson<EndpointMetadata>("endpoints");
         }
 
         const metadata = this.#endpointMetadata[category]!;
         const min = Number(metadata.min);
         const max = Number(metadata.max);
+
         const response = await fetchPath(
             `${category}/${(min + Math.floor(Math.random() * (max - min)))
                 .toString()
@@ -125,35 +116,6 @@ export class Client {
         }
 
         return fetchJson<NB_RESPONSE>(`${category}?amount=${amount}`);
-    }
-
-    /** Fetches the available endpoints.
-     *
-     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-endpoints
-     */
-    async fetchEndpoints(): Promise<boolean> {
-        if (!this.#initialized) {
-            throw new Error("Client must be already initialized before calling this method.");
-        }
-
-        return this.#fetchEndpoints(true);
-    }
-
-    async #fetchEndpoints(throwOnError: boolean): Promise<boolean> {
-        if (this.#endpointTimeout) {
-            clearTimeout(this.#endpointTimeout);
-            this.#endpointTimeout = undefined;
-        }
-
-        try {
-            this.#endpointMetadata = await fetchJson("endpoints");
-        } catch (err) {
-            if (throwOnError) throw err;
-            return false;
-        }
-
-        this.#endpointTimeout = setTimeout(() => this.#fetchEndpoints(false), 7_200_000);
-        return true;
     }
 }
 
