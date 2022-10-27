@@ -18,14 +18,21 @@ const CATEGORIES = [
 ] as const;
 
 type Nullable<T> = T | undefined | null;
-type EndpointMetadata = Record<string, {
+
+export type NbCategories = typeof CATEGORIES[number];
+export type NbEndpointMetadata = Record<string, {
     format: string;
     min: string;
     max: string;
 }>;
-
-export type NB_CATEGORIES = typeof CATEGORIES[number];
-export type NB_RESPONSE = {
+export type NbBufferResponse = {
+    artist_href?: string
+    artist_name?: string
+    source_url?: string
+    anime_name?: string
+    data: Buffer
+};
+export type NbResponse = {
     results: {
         artist_href?: string
         artist_name?: string
@@ -33,14 +40,7 @@ export type NB_RESPONSE = {
         anime_name?: string
         url: string
     }[]
-}
-export type NB_BUFFER_RESPONSE = {
-    artist_href?: string
-    artist_name?: string
-    source_url?: string
-    anime_name?: string
-    data: Buffer
-}
+};
 
 /**
  * A quick function to fetch a random file URL along with its metadata (if available).
@@ -49,13 +49,13 @@ export type NB_BUFFER_RESPONSE = {
  *
  * @param category The category to fetch the file URL from. If omitted, it picks a random category.
  */
-export async function fetchRandom(category?: NB_CATEGORIES) {
+export async function fetchRandom(category?: NbCategories) {
     return new Client().fetch(category, 1);
 }
 
 export default Client;
 export class Client {
-    #endpointMetadata: EndpointMetadata | null = null;
+    #endpointMetadata: NbEndpointMetadata | null = null;
 
     /**
      * Fetches and downloads a random file with its metadata (if available).
@@ -66,13 +66,13 @@ export class Client {
      *
      * @param category The category to download from.
      */
-    async fetchFile(category: NB_CATEGORIES): Promise<NB_BUFFER_RESPONSE> {
+    async fetchFile(category: NbCategories): Promise<NbBufferResponse> {
         if (!CATEGORIES.includes(category)) {
             throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
         }
 
         if (!this.#endpointMetadata) {
-            this.#endpointMetadata = await fetchJson<EndpointMetadata>("endpoints");
+            this.#endpointMetadata = await fetchJson<NbEndpointMetadata>("endpoints");
         }
 
         const metadata = this.#endpointMetadata[category]!;
@@ -102,7 +102,7 @@ export class Client {
      * @param category Category of assets. Set to `null` to pick a random category.
      * @param amount The amount of assets. Refer to the documentation for the limits.
      */
-    async fetch(category: Nullable<NB_CATEGORIES> = null, amount: number): Promise<NB_RESPONSE> {
+    async fetch(category: Nullable<NbCategories> = null, amount: number): Promise<NbResponse> {
         if (!category) {
             category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
         }
@@ -115,7 +115,7 @@ export class Client {
             throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
         }
 
-        return fetchJson<NB_RESPONSE>(`${category}?amount=${amount}`);
+        return fetchJson<NbResponse>(`${category}?amount=${amount}`);
     }
 }
 
