@@ -1,26 +1,54 @@
 
 import fetch from "node-fetch";
 
-const CATEGORIES = ["baka", "bite", "blush", "bored", "cry", "cuddle", "dance", "facepalm", "feed", "happy", "highfive", "hug", "kiss", "kitsune", "laugh", "neko", "pat", "poke", "pout", "shrug", "slap", "sleep", "smile", "smug", "stare", "think", "thumbsup", "tickle", "wave", "wink", "waifu", "kick", "handhold", "punch", "shoot", "husbando", "yeet"] as const;
+const CATEGORIES = [
+    "baka", "bite", "blush",
+    "bored", "cry", "cuddle",
+    "dance", "facepalm", "feed",
+    "happy", "highfive", "hug",
+    "kiss", "kitsune", "laugh",
+    "neko", "pat", "poke",
+    "pout", "shrug", "slap",
+    "sleep", "smile", "smug",
+    "stare", "think", "thumbsup",
+    "tickle", "wave", "wink",
+    "waifu", "kick", "handhold",
+    "punch", "shoot", "husbando",
+    "yeet"
+] as const;
 
-async function fetchPath(path: string) {
-    const response = await fetch(`https://nekos.best/api/v2/${path}`, {
-        headers: { "User-Agent": "nekos-best.js / 5.3.0" },
-        redirect: "follow",
-    });
+type Nullable<T> = T | undefined | null;
 
-    if (!response.ok) {
-        throw new Error(`Failed to fetch "${path}". Got status code ${response.status}.`);
-    }
-
-    return response;
+export type NB_CATEGORIES = typeof CATEGORIES[number];
+export type NB_RESPONSE = {
+    results: {
+        artist_href?: string
+        artist_name?: string
+        source_url?: string
+        anime_name?: string
+        url: string
+    }[]
+}
+export type NB_BUFFER_RESPONSE = {
+    artist_href?: string
+    artist_name?: string
+    source_url?: string
+    anime_name?: string
+    data: Buffer
 }
 
-async function fetchJson<T>(path: string): Promise<T> {
-    const response = await fetchPath(path);
-    return await response.json() as T;
+/**
+ * A quick function to fetch a random file URL along with its metadata (if available).
+ *
+ * If you are going to call this function multiple times, it's better to initialize a new `Client` instead.
+ *
+ * @param category The category to fetch the file URL from. If omitted, it picks a random category.
+ */
+export async function fetchRandom(category?: NB_CATEGORIES) {
+    return new Client().fetch(category);
 }
 
+export default Client;
 export class Client {
     #endpointMetadata: Record<string, { format: string, min: string, max: string }> | null = null;
     #endpointTimeout?: NodeJS.Timeout;
@@ -40,7 +68,12 @@ export class Client {
     }
 
     /**
-     * Downloads a random file along with its metadata (if available).
+     * Fetches and downloads a random file with its metadata (if available).
+     * For more advanced options, you should use the `Client.fetch()` method and
+     * fetch the file yourself.
+     *
+     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryfilenameformat
+     *
      * @param category The category to download from.
      */
     async fetchFile(category: NB_CATEGORIES): Promise<NB_BUFFER_RESPONSE> {
@@ -62,20 +95,27 @@ export class Client {
         );
 
         return {
-            artist_href: response.headers.get("artist_href")!,
-            anime_name: response.headers.get("anime_name")!,
-            source_url: response.headers.get("source_url")!,
-            artist_name: response.headers.get("artist_name")!,
+            artist_href: response.headers.get("artist_href") || void 0,
+            artist_name: response.headers.get("artist_name") || void 0,
+            anime_name: response.headers.get("anime_name") || void 0,
+            source_url: response.headers.get("source_url") || void 0,
             data: Buffer.from(await response.arrayBuffer()),
         };
     }
 
     /**
-     * Fetches multiple file URLs along with its metadata (if available).
-     * @param category The category to fetch multiple file URLs from.
-     * @param amount The amount of file URLs. It must be an integer between `1 ≤ x ≤ 20`
+     * Fetches multiple assets with their metadata (if available).
+     *
+     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryamountx
+     *
+     * @param category Category of assets. Set to `null` to pick a random category.
+     * @param amount The amount of assets. Refer to the documentation for the limits.
      */
-    async fetchMultiple(category: NB_CATEGORIES, amount = 5): Promise<NB_RESPONSE> {
+    async fetch(category: Nullable<NB_CATEGORIES> = null, amount = 1): Promise<NB_RESPONSE> {
+        if (!category) {
+            category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+        }
+
         if (!CATEGORIES.includes(category)) {
             throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
         }
@@ -84,22 +124,13 @@ export class Client {
             throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
         }
 
-        return fetchJson<NB_RESPONSE>(`${category}?amount=${Math.max(Math.min(Math.floor(amount), 20), 1)}`);
+        return fetchJson<NB_RESPONSE>(`${category}?amount=${amount}`);
     }
 
-    /**
-     * Fetches a random file URL along with its metadata (if available).
-     * @param category The category to fetch the file URL from. If omitted, it picks a random category.
+    /** Fetches the available endpoints.
+     *
+     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-endpoints
      */
-    async fetchRandom(category: NB_CATEGORIES | null = null): Promise<NB_RESPONSE> {
-        if (category != null && !CATEGORIES.includes(category)) {
-            throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
-        }
-
-        return fetchJson<NB_RESPONSE>(category || CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]);
-    }
-
-    /** Fetches from `/api/v2/endpoints`*/
     async fetchEndpoints(): Promise<boolean> {
         if (!this.#initialized) {
             throw new Error("Client must be already initialized before calling this method.");
@@ -126,33 +157,19 @@ export class Client {
     }
 }
 
-export default Client;
+async function fetchPath(path: string) {
+    const response = await fetch(`https://nekos.best/api/v2/${path}`, {
+        headers: { "User-Agent": "nekos-best.js / 6.0.0" },
+        redirect: "follow",
+    });
 
-/**
- * A quick function to fetch a random file URL along with its metadata (if available).
- * 
- * If you are going to call this function multiple times, it's better to initialize a new `Client` instead.
- * @param category The category to fetch the file URL from. If omitted, it picks a random category.
- */
-export async function fetchRandom(category?: NB_CATEGORIES) {
-    return new Client().fetchRandom(category);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch "${path}". Got status code ${response.status}.`);
+    }
+
+    return response;
 }
 
-export type NB_CATEGORIES = typeof CATEGORIES[number];
-export type NB_RESPONSE = {
-    results: {
-        artist_href?: string
-        artist_name?: string
-        source_url?: string
-        anime_name?: string
-        url: string
-    }[]
-}
-
-export type NB_BUFFER_RESPONSE = {
-    artist_href?: string
-    artist_name?: string
-    source_url?: string
-    anime_name?: string
-    data: Buffer
+async function fetchJson<T>(path: string): Promise<T> {
+    return await (await fetchPath(path)).json() as T;
 }
