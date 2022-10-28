@@ -1,25 +1,26 @@
 
 import fetch from "node-fetch";
 
-const CATEGORIES = [
+
+const IMAGE_CATEGORIES = ["kitsune", "neko"] as const;
+const GIF_CATEGORIES = [
     "baka", "bite", "blush",
     "bored", "cry", "cuddle",
     "dance", "facepalm", "feed",
     "happy", "highfive", "hug",
-    "kiss", "kitsune", "laugh",
-    "neko", "pat", "poke",
+    "kiss", "laugh", "pat",
     "pout", "shrug", "slap",
     "sleep", "smile", "smug",
     "stare", "think", "thumbsup",
     "tickle", "wave", "wink",
     "waifu", "kick", "handhold",
     "punch", "shoot", "husbando",
-    "yeet"
+    "yeet", "poke",
 ] as const;
 
 type Nullable<T> = T | undefined | null;
 
-export type NbCategories = typeof CATEGORIES[number];
+export type NbCategories = typeof GIF_CATEGORIES[number] | typeof IMAGE_CATEGORIES[number];
 export type NbEndpointMetadata = Record<string, {
     format: string;
     min: string;
@@ -67,9 +68,7 @@ export class Client {
      * @param category The category to download from.
      */
     async fetchFile(category: NbCategories): Promise<NbBufferResponse> {
-        if (!CATEGORIES.includes(category)) {
-            throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
-        }
+        validateCategory(category);
 
         if (!this.#endpointMetadata) {
             this.#endpointMetadata = await fetchJson<NbEndpointMetadata>("endpoints");
@@ -104,18 +103,32 @@ export class Client {
      */
     async fetch(category: Nullable<NbCategories> = null, amount: number): Promise<NbResponse> {
         if (!category) {
-            category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
-        }
-
-        if (!CATEGORIES.includes(category)) {
-            throw new TypeError(`"${category}" is not a valid category. Available categories: ${CATEGORIES.join(", ")}`);
+            category = pickRandomCategory();
+        } else {
+            validateCategory(category);
         }
 
         if (!Number.isSafeInteger(amount)) {
             throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
         }
 
-        return fetchJson<NbResponse>(`${category}?amount=${amount}`);
+        return fetchJson(`${category}?amount=${amount}`);
+    }
+
+    async search(query: string, category: Nullable<NbCategories> = null, amount: number): Promise<NbResponse> {
+        if (!category) {
+            category = pickRandomCategory();
+        } else {
+            validateCategory(category);
+        }
+
+        if (!Number.isSafeInteger(amount)) {
+            throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
+        }
+
+        const type = 2 - +IMAGE_CATEGORIES.includes(category as never);
+
+        return fetchJson(`search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`);
     }
 }
 
@@ -134,4 +147,20 @@ async function fetchPath(path: string) {
 
 async function fetchJson<T>(path: string): Promise<T> {
     return await (await fetchPath(path)).json() as T;
+}
+
+function validateCategory(category: string) {
+    if (!(IMAGE_CATEGORIES.includes(category as never) || GIF_CATEGORIES.includes(category as never))) {
+        throw new TypeError(`"${category}" is not a valid category. Available categories: ${IMAGE_CATEGORIES.join(", ")}${GIF_CATEGORIES.join(", ")}`);
+    }
+}
+
+function pickRandomCategory(): NbCategories {
+    const idx = Math.random() * (GIF_CATEGORIES.length + IMAGE_CATEGORIES.length) | 0;
+
+    if (idx < IMAGE_CATEGORIES.length) {
+        return IMAGE_CATEGORIES[idx];
+    }
+
+    return GIF_CATEGORIES[idx - IMAGE_CATEGORIES.length];
 }
