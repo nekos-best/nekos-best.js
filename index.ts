@@ -2,7 +2,7 @@
 import fetch from "node-fetch";
 
 
-const IMAGE_CATEGORIES = ["kitsune", "neko", "husbando"] as const;
+const IMAGE_CATEGORIES = ["kitsune", "neko", "husbando", "waifu"] as const;
 const GIF_CATEGORIES = [
     "baka", "bite", "blush",
     "bored", "cry", "cuddle",
@@ -13,9 +13,8 @@ const GIF_CATEGORIES = [
     "sleep", "smile", "smug",
     "stare", "think", "thumbsup",
     "tickle", "wave", "wink",
-    "waifu", "kick", "handhold",
-    "punch", "shoot", "yeet",
-    "poke",
+    "kick", "handhold", "punch",
+    "shoot", "yeet", "poke",
 ] as const;
 
 type Nullable<T> = T | undefined | null;
