@@ -2,7 +2,7 @@
 import fetch from "node-fetch";
 
 
-const IMAGE_CATEGORIES = ["kitsune", "neko"] as const;
+const IMAGE_CATEGORIES = ["kitsune", "neko", "husbando"] as const;
 const GIF_CATEGORIES = [
     "baka", "bite", "blush",
     "bored", "cry", "cuddle",
@@ -14,8 +14,8 @@ const GIF_CATEGORIES = [
     "stare", "think", "thumbsup",
     "tickle", "wave", "wink",
     "waifu", "kick", "handhold",
-    "punch", "shoot", "husbando",
-    "yeet", "poke",
+    "punch", "shoot", "yeet",
+    "poke",
 ] as const;
 
 type Nullable<T> = T | undefined | null;
@@ -54,7 +54,6 @@ export async function fetchRandom(category?: NbCategories) {
     return new Client().fetch(category, 1);
 }
 
-export default Client;
 export class Client {
     #endpointMetadata: NbEndpointMetadata | null = null;
 
@@ -124,7 +123,7 @@ export class Client {
      * @param category Category of assets. Set to `null` to pick a random category.
      * @param amount The amount of assets. Refer to the documentation for the limits.
      */
-    async search(query: string, category: Nullable<NbCategories> = null, amount: number): Promise<NbResponse> {
+    async search(query: string, category: Nullable<NbCategories> = null, amount = 1): Promise<NbResponse> {
         if (!category) {
             category = pickRandomCategory();
         } else {
@@ -142,17 +141,22 @@ export class Client {
 }
 
 async function fetchPath(path: string) {
-    const response = await fetch(`https://nekos.best/api/v2/${path}`, {
+    const url = `https://nekos.best/api/v2/${path}`;
+    const response = await fetch(url, {
         headers: { "User-Agent": "nekos-best.js / 6.0.0" },
         redirect: "follow",
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to fetch "${path}". Got status code ${response.status}.`);
+        const text = await response.text();
+
+        throw new Error(`Failed to fetch url "${url}" (status code ${response.status}): ${text}`);
     }
 
     return response;
 }
+
+export default Client;
 
 async function fetchJson<T>(path: string): Promise<T> {
     return await (await fetchPath(path)).json() as T;
@@ -160,7 +164,7 @@ async function fetchJson<T>(path: string): Promise<T> {
 
 function validateCategory(category: string) {
     if (!(IMAGE_CATEGORIES.includes(category as never) || GIF_CATEGORIES.includes(category as never))) {
-        throw new TypeError(`"${category}" is not a valid category. Available categories: ${IMAGE_CATEGORIES.join(", ")}${GIF_CATEGORIES.join(", ")}`);
+        throw new TypeError(`"${category}" is not a valid category. Available categories: ${IMAGE_CATEGORIES.join(", ")}, ${GIF_CATEGORIES.join(", ")}`);
     }
 }
 
