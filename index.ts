@@ -59,7 +59,7 @@ export class Client {
     #endpointMetadata: NbEndpointMetadata | null = null;
 
     /**
-     * Fetches and downloads a random file with its metadata (if available).
+     * Fetch and download a random file with its metadata (if available).
      * For more advanced options, you should use the `Client.fetch()` method and
      * fetch the file yourself.
      *
@@ -94,7 +94,7 @@ export class Client {
     }
 
     /**
-     * Fetches multiple assets with their metadata (if available).
+     * Fetch multiple assets with their metadata (if available).
      *
      * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryamountx
      *
@@ -115,6 +115,15 @@ export class Client {
         return fetchJson(`${category}?amount=${amount}`);
     }
 
+    /**
+     * Search for assets.
+     *
+     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-searchqueryxtypexcategoryxamountx
+     *
+     * @param query Search query.
+     * @param category Category of assets. Set to `null` to pick a random category.
+     * @param amount The amount of assets. Refer to the documentation for the limits.
+     */
     async search(query: string, category: Nullable<NbCategories> = null, amount: number): Promise<NbResponse> {
         if (!category) {
             category = pickRandomCategory();
