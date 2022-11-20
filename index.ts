@@ -19,7 +19,6 @@ const GIF_CATEGORIES = [
 type Nullable<T> = T | undefined | null;
 
 export type NbCategories = typeof GIF_CATEGORIES[number] | typeof IMAGE_CATEGORIES[number];
-type RatelimitHandleMode = "sleep" | "throw";
 
 export type NbEndpointMetadata = Record<string, {
     format: string;
@@ -44,6 +43,8 @@ export type NbResponse = {
         url: string
     }[]
 }
+
+export type RatelimitHandleMode = "sleep" | "throw";
 
 export interface ClientOptions {
     ratelimitHandleMode: RatelimitHandleMode
