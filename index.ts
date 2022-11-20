@@ -1,7 +1,6 @@
 
 import fetch from "node-fetch";
 
-
 const IMAGE_CATEGORIES = ["kitsune", "neko", "husbando", "waifu"] as const;
 const GIF_CATEGORIES = [
     "baka", "bite", "blush",
@@ -20,18 +19,22 @@ const GIF_CATEGORIES = [
 type Nullable<T> = T | undefined | null;
 
 export type NbCategories = typeof GIF_CATEGORIES[number] | typeof IMAGE_CATEGORIES[number];
+type RatelimitHandleMode = "sleep" | "throw";
+
 export type NbEndpointMetadata = Record<string, {
     format: string;
     min: string;
     max: string;
 }>;
+
 export type NbBufferResponse = {
     artist_href?: string
     artist_name?: string
     source_url?: string
     anime_name?: string
     data: Buffer
-};
+}
+
 export type NbResponse = {
     results: {
         artist_href?: string
@@ -40,7 +43,16 @@ export type NbResponse = {
         anime_name?: string
         url: string
     }[]
-};
+}
+
+export interface ClientOptions {
+    ratelimitHandleMode: RatelimitHandleMode
+}
+
+interface RatelimitData {
+    remaining: number,
+    resetsIn: number,
+}
 
 /**
  * A quick function to fetch a random file URL along with its metadata (if available).
@@ -55,6 +67,15 @@ export async function fetchRandom(category?: NbCategories) {
 
 export class Client {
     #endpointMetadata: NbEndpointMetadata | null = null;
+    #ratelimitData: RatelimitData | null = null;
+    #clientOptions: ClientOptions;
+
+    constructor(clientOptions?: Partial<ClientOptions>) {
+        this.#clientOptions = {
+            ratelimitHandleMode: "sleep",
+            ...clientOptions,
+        };
+    }
 
     /**
      * Fetch and download a random file with its metadata (if available).
@@ -123,6 +144,10 @@ export class Client {
      * @param amount The amount of assets. Refer to the documentation for the limits.
      */
     async search(query: string, category: Nullable<NbCategories> = null, amount = 1): Promise<NbResponse> {
+        if (this.#ratelimitData != null) {
+            await handleRatelimit(this.#clientOptions.ratelimitHandleMode, this.#ratelimitData);
+        }
+
         if (!category) {
             category = pickRandomCategory();
         } else {
@@ -134,8 +159,19 @@ export class Client {
         }
 
         const type = 2 - +IMAGE_CATEGORIES.includes(category as never);
+        const response = await fetchPath(`search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`);
 
-        return fetchJson(`search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`);
+        const remaining = response.headers.get("x-rate-limit-remaining");
+        const resetsIn = response.headers.get("x-rate-limit-reset");
+
+        if (remaining != null && resetsIn != null) {
+            this.#ratelimitData = {
+                resetsIn: Date.parse(resetsIn),
+                remaining: Number(remaining),
+            }
+        }
+
+        return await response.json();
     }
 }
 
@@ -175,4 +211,20 @@ function pickRandomCategory(): NbCategories {
     }
 
     return GIF_CATEGORIES[idx - IMAGE_CATEGORIES.length];
+}
+
+async function handleRatelimit(mode: RatelimitHandleMode, data: RatelimitData) {
+    const now = Date.now();
+
+    if (data.remaining <= 0 && data.resetsIn > now) {
+        switch (mode) {
+            case "sleep":
+                await new Promise(resolve => setTimeout(resolve, data.resetsIn - now));
+                return;
+            case "throw":
+                throw Error("You are being ratelimited");
+        }
+    }
+
+    --data.remaining;
 }
