@@ -14,6 +14,7 @@ const GIF_CATEGORIES = [
     "tickle", "wave", "wink",
     "kick", "handhold", "punch",
     "shoot", "yeet", "poke",
+    "nod", "nom", "nope"
 ] as const;
 
 type Nullable<T> = T | undefined | null;
