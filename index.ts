@@ -1,5 +1,7 @@
+import type { RequestInfo, RequestInit } from 'node-fetch';
 
-import fetch from "node-fetch";
+const fetch = (url: URL | RequestInfo, init?: RequestInit) =>
+    import('node-fetch').then(({ default: fetch }) => fetch(url, init));
 
 const IMAGE_CATEGORIES = ["kitsune", "neko", "husbando", "waifu"] as const;
 const GIF_CATEGORIES = [
@@ -27,6 +29,7 @@ type Nullable<T> = T | undefined | null;
 
 export type NbCategories = typeof GIF_CATEGORIES[number] | typeof IMAGE_CATEGORIES[number];
 
+/** @deprecated This will be removed in the next major version */
 export type NbEndpointMetadata = Record<string, {
     format: string;
     min: string;
@@ -153,7 +156,7 @@ export class Client {
             }
         }
 
-        return await response.json();
+        return await response.json() as NbResponse;
     }
 }
 
