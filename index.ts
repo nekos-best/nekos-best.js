@@ -17,6 +17,12 @@ const GIF_CATEGORIES = [
     "nod", "nom", "nope"
 ] as const;
 
+
+interface RatelimitData {
+    remaining: number,
+    resetsIn: number,
+}
+
 type Nullable<T> = T | undefined | null;
 
 export type NbCategories = typeof GIF_CATEGORIES[number] | typeof IMAGE_CATEGORIES[number];
@@ -27,33 +33,22 @@ export type NbEndpointMetadata = Record<string, {
     max: string;
 }>;
 
-export type NbBufferResponse = {
+// NbResponse was taken :(
+export type NbIndividualResponse = {
     artist_href?: string
     artist_name?: string
     source_url?: string
     anime_name?: string
-    data: Buffer
+    url: string
 }
 
-export type NbResponse = {
-    results: {
-        artist_href?: string
-        artist_name?: string
-        source_url?: string
-        anime_name?: string
-        url: string
-    }[]
-}
+export type NbResponse = { results: NbIndividualResponse[] }
+export type NbBufferResponse = NbIndividualResponse & { data: Buffer }
 
 export type RatelimitHandleMode = "sleep" | "throw";
 
 export interface ClientOptions {
     ratelimitHandleMode: RatelimitHandleMode
-}
-
-interface RatelimitData {
-    remaining: number,
-    resetsIn: number,
 }
 
 /**
@@ -68,11 +63,11 @@ export async function fetchRandom(category?: NbCategories) {
 }
 
 export class Client {
-    #endpointMetadata: NbEndpointMetadata | null = null;
     #ratelimitData: RatelimitData | null = null;
     #clientOptions: ClientOptions;
 
-    constructor(clientOptions?: Partial<ClientOptions>) {
+    constructor(clientOptions?: Partial<NbBufferResponse>) {
+
         this.#clientOptions = {
             ratelimitHandleMode: "sleep",
             ...clientOptions,
@@ -82,36 +77,21 @@ export class Client {
     /**
      * Fetch and download a random file with its metadata (if available).
      * For more advanced options, you should use the `Client.fetch()` method and
-     * fetch the file yourself.
+     * fetch the file by yourself.
      *
      * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryfilenameformat
      *
      * @param category The category to download from.
      */
-    async fetchFile(category: NbCategories): Promise<NbBufferResponse> {
-        validateCategory(category);
-
-        if (!this.#endpointMetadata) {
-            this.#endpointMetadata = await fetchJson<NbEndpointMetadata>("endpoints");
-        }
-
-        const metadata = this.#endpointMetadata[category]!;
-        const min = Number(metadata.min);
-        const max = Number(metadata.max);
-
-        const response = await fetchPath(
-            `${category}/${(min + Math.floor(Math.random() * (max - min)))
-                .toString()
-                .padStart(metadata.max.length, "0")}.${metadata.format}`
-        );
+    async fetchFile(category: Nullable<NbCategories> = null): Promise<NbBufferResponse> {
+        // The fetch() method performs the `category` validation
+        const fileDetails = (await this.fetch(category, 1)).results[0];
+        const file = (await fetchPath(void 0, fileDetails.url))
 
         return {
-            artist_href: response.headers.get("artist_href") || void 0,
-            artist_name: response.headers.get("artist_name") || void 0,
-            anime_name: response.headers.get("anime_name") || void 0,
-            source_url: response.headers.get("source_url") || void 0,
-            data: Buffer.from(await response.arrayBuffer()),
-        };
+            ...fileDetails,
+            data: Buffer.from(await file.arrayBuffer()),
+        }
     }
 
     /**
@@ -177,8 +157,9 @@ export class Client {
     }
 }
 
-async function fetchPath(path: string) {
-    const url = `https://nekos.best/api/v2/${path}`;
+// The parameters are a bit ugly but who cares, it's a private function
+async function fetchPath(path?: string, fullUrl: Nullable<string> = null) {
+    const url = fullUrl || `https://nekos.best/api/v2/${path}`;
     const response = await fetch(url, {
         headers: { "User-Agent": "nekos-best.js / 6.0.0" },
         redirect: "follow",
