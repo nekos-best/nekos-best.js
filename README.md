@@ -35,13 +35,10 @@ console.log(await fetchRandom("neko")); // { results: [{ artist_href: '···', 
 
 // Alternatively, you can initialize a new client which offers more features.
 const nekosBest = new Client();
-await nekosBest.init();
 
 // Such as the `<Client>.fetch()` method.
 console.log(await nekosBest.fetch("neko", 1)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0138.png' }] }
-
-// You can use the `<Client>.fetchMultiple()` method to fetch multiple hug GIFs.
-console.log(await nekosBest.fetchMultiple("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
+console.log(await nekosBest.fetch("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
 
 // Or the `<Client>.fetchFile()` method to get a single file.
 console.log(await nekosBest.fetchFile("neko")); // { artist_href: '···', ···, data: <Buffer> }
