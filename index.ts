@@ -70,7 +70,6 @@ export class Client {
     #clientOptions: ClientOptions;
 
     constructor(clientOptions?: Partial<NbBufferResponse>) {
-
         this.#clientOptions = {
             ratelimitHandleMode: "sleep",
             ...clientOptions,
@@ -143,6 +142,8 @@ export class Client {
             throw new TypeError(`Expected a safe integer for amount. Got "${amount}".`);
         }
 
+        // Type 1 is images so if `category` is in `IMAGE_CATEGORIES`, the result will be 2 - 1 = 1
+        // Type 2 is for GIFs; 2 - 0 = 2
         const type = 2 - +IMAGE_CATEGORIES.includes(category as never);
         const response = await fetchPath(`search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`);
 
