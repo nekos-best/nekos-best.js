@@ -31,14 +31,14 @@ Join the official Discord server **[here](https://nekos.best/discord?ref=js)**
 import { Client, fetchRandom } from "nekos-best.js";
 
 // You can use the `fetchRandom()` function to fetch a random neko.
-console.log(await fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0247.png' }] }
+console.log(await fetchRandom("neko")); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/XXXXX-XXXXX.png' }] }
 
 // Alternatively, you can initialize a new client which offers more features.
 const nekosBest = new Client();
 
 // Such as the `<Client>.fetch()` method.
-console.log(await nekosBest.fetch("neko", 1)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/0138.png' }] }
-console.log(await nekosBest.fetch("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/019.gif' }, ···] }
+console.log(await nekosBest.fetch("neko", 1)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/neko/XXXXX-XXXXX.png' }] }
+console.log(await nekosBest.fetch("hug", 10)); // { results: [{ artist_href: '···', artist_name: '···', source_url: '···', url: 'https://nekos.best/api/v2/hug/XXXXX-XXXXX.gif' }, ···] }
 
 // Or the `<Client>.fetchFile()` method to get a single file.
 console.log(await nekosBest.fetchFile("neko")); // { artist_href: '···', ···, data: <Buffer> }
