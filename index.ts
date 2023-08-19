@@ -16,7 +16,9 @@ const GIF_CATEGORIES = [
     "tickle", "wave", "wink",
     "kick", "handhold", "punch",
     "shoot", "yeet", "poke",
-    "nod", "nom", "nope"
+    "nod", "nom", "nope",
+    "handshake", "lurk", "peck",
+    "yawn",
 ] as const;
 
 
