@@ -56,12 +56,14 @@ const nekosBest = new Client();
 discordClient.on("messageCreate", async (message) => {
     if (message.author.bot) return;
 
-    if (message.content.startsWith('!neko')) {
+    if (message.content.startsWith("!neko")) {
         message.channel.send((await nekosBest.fetch("neko", 1)).results[0].url);
     }
-})
+});
 
-discordClient.login("************************.******.***************************");
+discordClient.login(
+    "************************.******.***************************",
+);
 ```
 
 ## Migrate from 5.X.X to 6.X.X
