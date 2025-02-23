@@ -20,8 +20,8 @@
     ],
     "scripts": {
         "check:eslint": "eslint --cache --fix .",
-        "build": "pnpm tsc",
-        "prepack": "pnpm build && pnpm types"
+        "prepack": "pnpm build",
+        "build": "pnpm tsc"
     },
     "devDependencies": {
         "@stylistic/eslint-plugin": "^4.0.1",
