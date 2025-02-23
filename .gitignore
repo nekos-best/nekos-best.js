@@ -1,4 +1,4 @@
 node_modules/
-index.d.ts
-yarn.lock
-index.js
+dist/
+
+.eslintcache

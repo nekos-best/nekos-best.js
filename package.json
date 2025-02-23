@@ -1,15 +1,7 @@
 {
     "name": "nekos-best.js",
-    "version": "6.3.1",
+    "version": "7.0.0",
     "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings.",
-    "typings": "index.d.ts",
-    "files": [
-        "index.*"
-    ],
-    "exports": {
-        "import": "./index.mjs",
-        "require": "./index.js"
-    },
     "license": "MIT",
     "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
     "author": "thunder04 (https://github.com/thunder04)",
@@ -27,19 +19,17 @@
         "rp"
     ],
     "scripts": {
-        "build": "pnpm esbuild index.ts --outfile=index.js --platform=node --format=cjs --target=esnext",
-        "types": "pnpm tsc --emitDeclarationOnly",
+        "check:eslint": "eslint --cache --fix .",
+        "build": "pnpm tsc",
         "prepack": "pnpm build && pnpm types"
     },
-    "dependencies": {
-        "node-fetch": "^3.3.2"
-    },
     "devDependencies": {
-        "@types/node": "^22.13.4",
-        "esbuild": "^0.25.0",
-        "typescript": "^5.7.3"
+        "@stylistic/eslint-plugin": "^4.0.1",
+        "eslint-plugin-perfectionist": "^4.9.0",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.24.1"
     },
     "engines": {
-        "node": ">=16.17.0"
+        "node": ">=22.0.0"
     }
 }
