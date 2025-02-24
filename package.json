@@ -6,6 +6,10 @@
     "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
     "author": "thunder04 (https://github.com/thunder04)",
     "repository": "github:nekos-best/nekos-best.js",
+    "exports": {
+        "import": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+    },
     "contributors": [
         "oriel-beck (https://github.com/oriel-beck)",
         "Thusuzzee (https://github.com/Thusuzzee)"

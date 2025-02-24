@@ -1,5 +1,3 @@
-export type Optional<T> = null | T | undefined;
-
 /**
 * Selects an element in one of the provided arrays. Returns the element and the array chosen.
 * @package

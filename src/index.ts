@@ -1,31 +1,26 @@
 import type { GifAssetMetadata, GifCategories, PngAssetMetadata, PngCategories } from "./types.js";
-import type { Optional } from "utils";
 
 import { randomIn, sleepAsync, validateAnyIn, validatePosInteger } from "./utils.js";
 import { CATEGORIES } from "./constants.js";
 
 export type * from "./types.js";
 
+const DEFAULT_AMOUNT = 5;
+
 // Keep it around just in case we introduce new options in the future.
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ClientOptions { }
 
-/** @package */
-interface RatelimitBody {
-    remaining: number;
-    resetsAt: number;
-}
-
 export class Client {
     // TODO: The current ratelimitter assumes single bucket. Split it by multiple paths
     /** @private */
-    _lastRateLimitBody: null | RatelimitBody = null;
+    private _lastRateLimitBody: null | RatelimitBody = null;
 
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-unused-vars
     constructor(clientOptions?: ClientOptions) { /* */ }
 
     /** @private */
-    static _parseRatelimitBody(response: Response): null | RatelimitBody {
+    private static _parseRatelimitBody(response: Response): null | RatelimitBody {
         const remaining = response.headers.get("x-rate-limit-remaining");
         const resetsAt = response.headers.get("x-rate-limit-reset");
 
@@ -40,7 +35,7 @@ export class Client {
     }
 
     /** @private */
-    async _fetch(path: string, _retry = true): Promise<Response> {
+    private async _fetch(path: string, _retry = true): Promise<Response> {
         if (this._lastRateLimitBody) {
             const now = Date.now();
 
@@ -90,11 +85,18 @@ export class Client {
     }
 
     /** @private */
-    async _fetchJson<T>(path: string): Promise<T> {
+    private async _fetchJson<T>(path: string): Promise<T> {
         return await (await this._fetch(path)).json();
     }
 
-    async fetchGifAssets(category?: Optional<GifCategories>, amount = 5): Promise<GifAssetMetadata[]> {
+    /**
+    * Fetches the metadata of multiple GIF assets.
+    * @param category The category of assets to fetch from. By default, it picks a random category.
+    * @param amount The amount of assets to return. Consult the documentation for the current limits.
+    * @returns An array of asset metadata.
+    * @link https://docs.nekos.best/api/endpoints.html
+    */
+    async fetchGifAssets(category?: GifCategories, amount = DEFAULT_AMOUNT): Promise<GifAssetMetadata[]> {
         validatePosInteger(amount);
 
         if (!category) {
@@ -103,10 +105,17 @@ export class Client {
             validateAnyIn(category, CATEGORIES.GIF);
         }
 
-        return await this._fetchJson(`endpoints/${category}?amount=${amount}`);
+        return await this._fetchJson(`${category}?amount=${amount}`);
     }
 
-    async fetchPngAssets(category?: Optional<PngCategories>, amount = 5): Promise<PngAssetMetadata[]> {
+    /**
+    * Fetches the metadata of multiple PNG assets.
+    * @param category The category of assets to fetch from. By default, it picks a random category.
+    * @param amount The amount of assets to return. Consult the documentation for the current limits.
+    * @returns An array of asset metadata.
+    * @link https://docs.nekos.best/api/endpoints.html
+    */
+    async fetchPngAssets(category?: PngCategories, amount = DEFAULT_AMOUNT): Promise<PngAssetMetadata[]> {
         validatePosInteger(amount);
 
         if (!category) {
@@ -115,7 +124,7 @@ export class Client {
             validateAnyIn(category, CATEGORIES.PNG);
         }
 
-        return await this._fetchJson(`endpoints/${category}?amount=${amount}`);
+        return await this._fetchJson(`${category}?amount=${amount}`);
     }
 
     /**
@@ -129,7 +138,7 @@ export class Client {
      */
     // async search(
     //     query: string,
-    //     category: Optional<NbCategories> = null,
+    //     category: NbCategories = null,
     //     amount = 1,
     // ): Promise<NbResponse> {
     //     if (this._lastRateLimitBody != null) {
@@ -170,4 +179,10 @@ export class Client {
 
     //     return (await response.json()) as NbResponse;
     // }
+}
+
+/** @package */
+interface RatelimitBody {
+    remaining: number;
+    resetsAt: number;
 }
