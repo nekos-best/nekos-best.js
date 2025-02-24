@@ -1,10 +1,12 @@
 import type { CATEGORIES } from "./constants.js";
 
 export type Categories = GifCategories | PngCategories;
+
 export interface CommonAssetMetadata {
     /** The link to download the given asset. */
     url: string;
 }
+
 export interface GifAssetMetadata extends CommonAssetMetadata {
     /** The name of the featured anime. */
     anime_name: string;
@@ -23,6 +25,19 @@ export interface PngAssetMetadata extends CommonAssetMetadata {
 
 export type PngCategories = typeof CATEGORIES["PNG"][number];
 
-export type RandomAssetMetadata =
+export type AssetFormat = "png" | "gif";
+
+export type MixedAssetMetadata =
     | (GifAssetMetadata & { type: "gif" })
     | (PngAssetMetadata & { type: "png" });
+
+/** @private */
+export interface EndpointsResponse<T> {
+    results: T[];
+}
+
+
+/** @private */
+export interface SearchResponse<T> {
+    results: T[];
+}

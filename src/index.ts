@@ -1,4 +1,6 @@
-import type { GifAssetMetadata, GifCategories, PngAssetMetadata, PngCategories } from "./types.js";
+// TODO: Rename png to static and gif to animated.
+
+import type { Categories, GifAssetMetadata, GifCategories, PngAssetMetadata, PngCategories, AssetFormat, EndpointsResponse, SearchResponse, MixedAssetMetadata } from "./types.js";
 
 import { randomIn, sleepAsync, validateAnyIn, validatePosInteger } from "./utils.js";
 import { CATEGORIES } from "./constants.js";
@@ -10,6 +12,26 @@ const DEFAULT_AMOUNT = 5;
 // Keep it around just in case we introduce new options in the future.
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ClientOptions { }
+
+export interface SearchOptions {
+    /**
+    * If provided, it searches only in the assets of the given category.
+    * Otherwise, it searches in all categories, unless restricted by
+    * `SearchOptions.format`.
+    */
+    category?: Categories;
+
+    /**
+    * Restricts the type of assets to return.
+    */
+    format?: AssetFormat;
+
+    /**
+    * The amount of results to return. Consult the documenation for the current limtis.
+    * @link https://docs.nekos.best/api/endpoints.html
+    */
+    amount?: number;
+}
 
 export class Client {
     // TODO: The current ratelimitter assumes single bucket. Split it by multiple paths
@@ -105,7 +127,7 @@ export class Client {
             validateAnyIn(category, CATEGORIES.GIF);
         }
 
-        return await this._fetchJson(`${category}?amount=${amount}`);
+        return (await this._fetchJson<EndpointsResponse<GifAssetMetadata>>(`${category}?amount=${amount}`)).results;
     }
 
     /**
@@ -124,61 +146,43 @@ export class Client {
             validateAnyIn(category, CATEGORIES.PNG);
         }
 
-        return await this._fetchJson(`${category}?amount=${amount}`);
+        return (await this._fetchJson<EndpointsResponse<PngAssetMetadata>>(`${category}?amount=${amount}`)).results;
     }
 
     /**
-     * Search for assets.
-     *
-     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-searchqueryxtypexcategoryxamountx
-     *
-     * @param query Search query.
-     * @param category Category of assets. Set to `null` to pick a random category.
-     * @param amount The amount of assets. Refer to the documentation for the limits.
-     */
-    // async search(
-    //     query: string,
-    //     category: NbCategories = null,
-    //     amount = 1,
-    // ): Promise<NbResponse> {
-    //     if (this._lastRateLimitBody != null) {
-    //         await handleRatelimit(
-    //             this.#clientOptions.ratelimitHandleMode,
-    //             this._lastRateLimitBody,
-    //         );
-    //     }
+    * Search for assets with the given query. See the documentation of `SearchOptions` for more details.
+    *
+    * @param query The search query.
+    * @param options Searching options.
+    * @link https://docs.nekos.best/api/endpoints.html
+    */
+    async search(query: string, options: SearchOptions = {}): Promise<MixedAssetMetadata[]> {
+        if (typeof options.amount !== "undefined") {
+            validatePosInteger(options.amount);
+        }
 
-    //     if (!category) {
-    //         category = pickRandomCategory();
-    //     } else {
-    //         validateCategory(category);
-    //     }
+        if (typeof options.category !== "undefined") {
+            validateAnyIn(options.category, CATEGORIES.GIF, CATEGORIES.PNG);
+        }
 
-    //     if (!Number.isSafeInteger(amount)) {
-    //         throw new TypeError(
-    //             `Expected a safe integer for amount. Got "${amount}".`,
-    //         );
-    //     }
+        const qs = [`query=${encodeURIComponent(query)}`];
 
-    //     // Type 1 is images so if `category` is in `IMAGE_CATEGORIES`, the result will be 2 - 1 = 1
-    //     // Type 2 is for GIFs; 2 - 0 = 2
-    //     const type = 2 - +IMAGE_CATEGORIES.includes(category as never);
-    //     const response = await fetchPath(
-    //         `search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`,
-    //     );
+        if (options.category) qs.push(`category=${encodeURIComponent(options.category)}`);
+        if (options.format) qs.push(`type=${encodeURIComponent(options.format)}`);
+        if (options.amount) qs.push(`amount=${encodeURIComponent(options.amount)}`);
 
-    //     const remaining = response.headers.get("x-rate-limit-remaining");
-    //     const resetsIn = response.headers.get("x-rate-limit-reset");
+        const results = (await this._fetchJson<SearchResponse<MixedAssetMetadata>>(`search?${qs.join("&")}`)).results;
 
-    //     if (remaining != null && resetsIn != null) {
-    //         this._lastRateLimitBody = {
-    //             resetsAt: Date.parse(resetsIn),
-    //             remaining: Number(remaining),
-    //         };
-    //     }
+        for (const asset of results) {
+            if ("anime_name" in asset) {
+                asset.type = "gif";
+            } else {
+                asset.type = "png";
+            }
+        }
 
-    //     return (await response.json()) as NbResponse;
-    // }
+        return results;
+    }
 }
 
 /** @package */
