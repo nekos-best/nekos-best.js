@@ -1,0 +1,20 @@
+{
+    "name": "nekos-best.js-testing-playground",
+    "version": "0.0.0",
+    "type": "module",
+    "devDependencies": {
+        "@stylistic/eslint-plugin": "^4.0.1",
+        "eslint-plugin-perfectionist": "^4.9.0",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.24.1"
+    },
+    "scripts": {
+        "dev": "node --experimental-strip-types index.ts"
+    },
+    "engines": {
+        "node": ">=22.0.0"
+    },
+    "dependencies": {
+        "nekos-best.js": "link:.."
+    }
+}

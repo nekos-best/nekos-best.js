@@ -10,6 +10,9 @@
         "import": "./dist/index.js",
         "types": "./dist/index.d.ts"
     },
+    "files": [
+        "/dist"
+    ],
     "contributors": [
         "oriel-beck (https://github.com/oriel-beck)",
         "Thusuzzee (https://github.com/Thusuzzee)"
