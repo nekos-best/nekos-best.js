@@ -7,8 +7,14 @@
         "index.*"
     ],
     "exports": {
-        "import": "./index.mjs",
-        "require": "./index.js"
+        "import": {
+            "default": "./index.mjs",
+            "types": "./index.d.ts"
+        },
+        "require": {
+            "default": "./index.js",
+            "types": "./index.d.ts"
+        }
     },
     "license": "MIT",
     "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
