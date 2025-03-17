@@ -45,6 +45,8 @@ const GIF_CATEGORIES = [
     "lurk",
     "peck",
     "yawn",
+    "angry",
+    "run"
 ] as const;
 
 interface RatelimitData {
