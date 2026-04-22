@@ -1,11 +1,13 @@
-export const IMAGE_CATEGORIES = [
+export type ArtworkCategories = (typeof ARTWORK_CATEGORIES)[number];
+export const ARTWORK_CATEGORIES = Object.freeze([
     "kitsune",
     "neko",
     "husbando",
     "waifu",
-] as const;
+] as const);
 
-export const GIF_CATEGORIES = [
+export type RoleplayCategories = (typeof ROLEPLAY_CATEGORIES)[number];
+export const ROLEPLAY_CATEGORIES = Object.freeze([
     "angry",
     "baka",
     "bite",
@@ -65,4 +67,10 @@ export const GIF_CATEGORIES = [
     "wink",
     "yawn",
     "yeet",
-] as const;
+] as const);
+
+export type Categories = (typeof CATEGORIES)[number];
+export const CATEGORIES = Object.freeze([
+    ...ARTWORK_CATEGORIES,
+    ...ROLEPLAY_CATEGORIES,
+]);

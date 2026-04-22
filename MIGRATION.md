@@ -5,6 +5,8 @@
   provides [a migration guide](https://deno.com/blog/convert-cjs-to-esm) to help
   you to transition.
 
+- `NbEndpointMetadata` has been removed. Use the static properties `artworkCategories`, `roleplayCategories`, and `categories` of the `Client` class to obtain all categories.
+
 ## Migrate from 5.X.X to 6.X.X
 
 **❗ For the TypeScript users, the type `NbEndpointMetadata` will be removed in the 7.X.X version due to recent API changes**

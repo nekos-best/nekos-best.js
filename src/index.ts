@@ -1,236 +1,248 @@
-import { GIF_CATEGORIES, IMAGE_CATEGORIES } from "./categories.js";
+export {
+    ArtworkCategories,
+    RoleplayCategories,
+    Categories,
+} from "./categories.js";
 
-interface RatelimitData {
-    remaining: number;
-    resetsIn: number;
-}
+export { Client } from "./client.js";
 
-type Nullable<T> = T | undefined | null;
+export * from "./models.js";
 
-export type NbCategories =
-    | (typeof GIF_CATEGORIES)[number]
-    | (typeof IMAGE_CATEGORIES)[number];
+// import { ROLEPLAY_CATEGORIES, ARTWORK_CATEGORIES } from "./categories.js";
 
-/** @deprecated This will be removed in the next major version */
-export type NbEndpointMetadata = Record<
-    string,
-    {
-        format: string;
-        min: string;
-        max: string;
-    }
->;
+// interface RatelimitData {
+//     remaining: number;
+//     resetsIn: number;
+// }
 
-// NbResponse was taken :(
-export type NbIndividualResponse = {
-    anime_name?: string;
-    artist_href?: string;
-    artist_name?: string;
-    dimensions: {
-        width: number;
-        height: number;
-    };
-    source_url?: string;
-    url: string;
-};
+// type Nullable<T> = T | undefined | null;
 
-export type NbResponse = { results: NbIndividualResponse[] };
-export type NbBufferResponse = NbIndividualResponse & { data: Buffer };
+// export type NbCategories =
+//     | (typeof ROLEPLAY_CATEGORIES)[number]
+//     | (typeof ARTWORK_CATEGORIES)[number];
 
-export type RatelimitHandleMode = "sleep" | "throw";
+// /** @deprecated This will be removed in the next major version */
+// export type NbEndpointMetadata = Record<
+//     string,
+//     {
+//         format: string;
+//         min: string;
+//         max: string;
+//     }
+// >;
 
-export interface ClientOptions {
-    ratelimitHandleMode: RatelimitHandleMode;
-}
+// // NbResponse was taken :(
+// export type NbIndividualResponse = {
+//     anime_name?: string;
+//     artist_href?: string;
+//     artist_name?: string;
+//     dimensions: {
+//         width: number;
+//         height: number;
+//     };
+//     source_url?: string;
+//     url: string;
+// };
 
-/**
- * A quick function to fetch a random file URL along with its metadata (if available).
- *
- * If you are going to call this function multiple times, it's better to initialize a new `Client` instead.
- *
- * @param category The category to fetch the file URL from. If omitted, it picks a random category.
- */
-export async function fetchRandom(category?: NbCategories) {
-    return new Client().fetch(category, 1);
-}
+// export type NbResponse = { results: NbIndividualResponse[] };
+// export type NbBufferResponse = NbIndividualResponse & { data: Buffer };
 
-export class Client {
-    #ratelimitData: RatelimitData | null = null;
-    #clientOptions: ClientOptions;
+// export type RatelimitHandleMode = "sleep" | "throw";
 
-    constructor(clientOptions?: Partial<NbBufferResponse>) {
-        this.#clientOptions = {
-            ratelimitHandleMode: "sleep",
-            ...clientOptions,
-        };
-    }
+// export interface ClientOptions {
+//     ratelimitHandleMode: RatelimitHandleMode;
+// }
 
-    /**
-     * Fetch and download a random file with its metadata (if available).
-     * For more advanced options, you should use the `Client.fetch()` method and
-     * fetch the file by yourself.
-     *
-     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryfilenameformat
-     *
-     * @param category The category to download from.
-     */
-    async fetchFile(
-        category: Nullable<NbCategories> = null,
-    ): Promise<NbBufferResponse> {
-        // The fetch() method performs the `category` validation
-        const fileDetails = (await this.fetch(category, 1)).results[0];
-        const file = await fetchPath(void 0, fileDetails.url);
+// /**
+//  * A quick function to fetch a random file URL along with its metadata (if available).
+//  *
+//  * If you are going to call this function multiple times, it's better to initialize a new `Client` instead.
+//  *
+//  * @param category The category to fetch the file URL from. If omitted, it picks a random category.
+//  */
+// export async function fetchRandom(category?: NbCategories) {
+//     return new Client().fetch(category, 1);
+// }
 
-        return {
-            ...fileDetails,
-            data: Buffer.from(await file.arrayBuffer()),
-        };
-    }
+// export class Client {
+//     #ratelimitData: RatelimitData | null = null;
+//     #clientOptions: ClientOptions;
 
-    /**
-     * Fetch multiple assets with their metadata (if available).
-     *
-     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryamountx
-     *
-     * @param category Category of assets. Set to `null` to pick a random category.
-     * @param amount The amount of assets. Refer to the documentation for the limits.
-     */
-    async fetch(
-        category: Nullable<NbCategories> = null,
-        amount: number,
-    ): Promise<NbResponse> {
-        if (!category) {
-            category = pickRandomCategory();
-        } else {
-            validateCategory(category);
-        }
+//     constructor(clientOptions?: Partial<NbBufferResponse>) {
+//         this.#clientOptions = {
+//             ratelimitHandleMode: "sleep",
+//             ...clientOptions,
+//         };
+//     }
 
-        if (!Number.isSafeInteger(amount)) {
-            throw new TypeError(
-                `Expected a safe integer for amount. Got "${amount}".`,
-            );
-        }
+//     /**
+//      * Fetch and download a random file with its metadata (if available).
+//      * For more advanced options, you should use the `Client.fetch()` method and
+//      * fetch the file by yourself.
+//      *
+//      * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryfilenameformat
+//      *
+//      * @param category The category to download from.
+//      */
+//     async fetchFile(
+//         category: Nullable<NbCategories> = null,
+//     ): Promise<NbBufferResponse> {
+//         // The fetch() method performs the `category` validation
+//         const fileDetails = (await this.fetch(category, 1)).results[0];
+//         const file = await fetchPath(void 0, fileDetails.url);
 
-        return fetchJson(`${category}?amount=${amount}`);
-    }
+//         return {
+//             ...fileDetails,
+//             data: Buffer.from(await file.arrayBuffer()),
+//         };
+//     }
 
-    /**
-     * Search for assets.
-     *
-     * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-searchqueryxtypexcategoryxamountx
-     *
-     * @param query Search query.
-     * @param category Category of assets. Set to `null` to pick a random category.
-     * @param amount The amount of assets. Refer to the documentation for the limits.
-     */
-    async search(
-        query: string,
-        category: Nullable<NbCategories> = null,
-        amount = 1,
-    ): Promise<NbResponse> {
-        if (this.#ratelimitData != null) {
-            await handleRatelimit(
-                this.#clientOptions.ratelimitHandleMode,
-                this.#ratelimitData,
-            );
-        }
+//     /**
+//      * Fetch multiple assets with their metadata (if available).
+//      *
+//      * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryamountx
+//      *
+//      * @param category Category of assets. Set to `null` to pick a random category.
+//      * @param amount The amount of assets. Refer to the documentation for the limits.
+//      */
+//     async fetch(
+//         category: Nullable<NbCategories> = null,
+//         amount: number,
+//     ): Promise<NbResponse> {
+//         if (!category) {
+//             category = pickRandomCategory();
+//         } else {
+//             validateCategory(category);
+//         }
 
-        if (!category) {
-            category = pickRandomCategory();
-        } else {
-            validateCategory(category);
-        }
+//         if (!Number.isSafeInteger(amount)) {
+//             throw new TypeError(
+//                 `Expected a safe integer for amount. Got "${amount}".`,
+//             );
+//         }
 
-        if (!Number.isSafeInteger(amount)) {
-            throw new TypeError(
-                `Expected a safe integer for amount. Got "${amount}".`,
-            );
-        }
+//         return fetchJson(`${category}?amount=${amount}`);
+//     }
 
-        // Type 1 is images so if `category` is in `IMAGE_CATEGORIES`, the result will be 2 - 1 = 1
-        // Type 2 is for GIFs; 2 - 0 = 2
-        const type = 2 - +IMAGE_CATEGORIES.includes(category as never);
-        const response = await fetchPath(
-            `search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`,
-        );
+//     /**
+//      * Search for assets.
+//      *
+//      * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-searchqueryxtypexcategoryxamountx
+//      *
+//      * @param query Search query.
+//      * @param category Category of assets. Set to `null` to pick a random category.
+//      * @param amount The amount of assets. Refer to the documentation for the limits.
+//      */
+//     async search(
+//         query: string,
+//         category: Nullable<NbCategories> = null,
+//         amount = 1,
+//     ): Promise<NbResponse> {
+//         if (this.#ratelimitData != null) {
+//             await handleRatelimit(
+//                 this.#clientOptions.ratelimitHandleMode,
+//                 this.#ratelimitData,
+//             );
+//         }
 
-        const remaining = response.headers.get("x-rate-limit-remaining");
-        const resetsIn = response.headers.get("x-rate-limit-reset");
+//         if (!category) {
+//             category = pickRandomCategory();
+//         } else {
+//             validateCategory(category);
+//         }
 
-        if (remaining != null && resetsIn != null) {
-            this.#ratelimitData = {
-                resetsIn: Date.parse(resetsIn),
-                remaining: Number(remaining),
-            };
-        }
+//         if (!Number.isSafeInteger(amount)) {
+//             throw new TypeError(
+//                 `Expected a safe integer for amount. Got "${amount}".`,
+//             );
+//         }
 
-        return (await response.json()) as NbResponse;
-    }
-}
+//         // Type 1 is images so if `category` is in `IMAGE_CATEGORIES`, the result will be 2 - 1 = 1
+//         // Type 2 is for GIFs; 2 - 0 = 2
+//         const type = 2 - +ARTWORK_CATEGORIES.includes(category as never);
+//         const response = await fetchPath(
+//             `search?query=${encodeURIComponent(query)}&type=${type}&category=${category}&amount=${amount}`,
+//         );
 
-// The parameters are a bit ugly but who cares? It's a private function
-async function fetchPath(path?: string, fullUrl: Nullable<string> = null) {
-    const url = fullUrl || `https://nekos.best/api/v2/${path}`;
-    const response = await fetch(url, {
-        headers: { "User-Agent": "nekos-best.js / 6.5.0" },
-        redirect: "follow",
-    });
+//         const remaining = response.headers.get("x-rate-limit-remaining");
+//         const resetsIn = response.headers.get("x-rate-limit-reset");
 
-    if (!response.ok) {
-        const text = await response.text();
+//         if (remaining != null && resetsIn != null) {
+//             this.#ratelimitData = {
+//                 resetsIn: Date.parse(resetsIn),
+//                 remaining: Number(remaining),
+//             };
+//         }
 
-        throw new Error(
-            `Failed to fetch url "${url}" (status code ${response.status}): ${text}`,
-        );
-    }
+//         return (await response.json()) as NbResponse;
+//     }
+// }
 
-    return response;
-}
+// // The parameters are a bit ugly but who cares? It's a private function
+// async function fetchPath(path?: string, fullUrl: Nullable<string> = null) {
+//     const url = fullUrl || `https://nekos.best/api/v2/${path}`;
+//     const response = await fetch(url, {
+//         headers: { "User-Agent": "nekos-best.js / 6.5.0" },
+//         redirect: "follow",
+//     });
 
-export default Client;
+//     if (!response.ok) {
+//         const text = await response.text();
 
-async function fetchJson<T>(path: string): Promise<T> {
-    return (await (await fetchPath(path)).json()) as T;
-}
+//         throw new Error(
+//             `Failed to fetch url "${url}" (status code ${response.status}): ${text}`,
+//         );
+//     }
 
-function validateCategory(category: string) {
-    if (
-        !(
-            IMAGE_CATEGORIES.includes(category as never) ||
-            GIF_CATEGORIES.includes(category as never)
-        )
-    ) {
-        throw new TypeError(
-            `"${category}" is not a valid category. Available categories: ${IMAGE_CATEGORIES.join(", ")}, ${GIF_CATEGORIES.join(", ")}`,
-        );
-    }
-}
+//     return response;
+// }
 
-function pickRandomCategory(): NbCategories {
-    const idx =
-        (Math.random() * (GIF_CATEGORIES.length + IMAGE_CATEGORIES.length)) | 0;
+// export default Client;
 
-    if (idx < IMAGE_CATEGORIES.length) {
-        return IMAGE_CATEGORIES[idx];
-    }
+// async function fetchJson<T>(path: string): Promise<T> {
+//     return (await (await fetchPath(path)).json()) as T;
+// }
 
-    return GIF_CATEGORIES[idx - IMAGE_CATEGORIES.length];
-}
+// function validateCategory(category: string) {
+//     if (
+//         !(
+//             ARTWORK_CATEGORIES.includes(category as never) ||
+//             ROLEPLAY_CATEGORIES.includes(category as never)
+//         )
+//     ) {
+//         throw new TypeError(
+//             `"${category}" is not a valid category. Available categories: ${ARTWORK_CATEGORIES.join(", ")}, ${ROLEPLAY_CATEGORIES.join(", ")}`,
+//         );
+//     }
+// }
 
-async function handleRatelimit(mode: RatelimitHandleMode, data: RatelimitData) {
-    const now = Date.now();
+// function pickRandomCategory(): NbCategories {
+//     const idx =
+//         (Math.random() *
+//             (ROLEPLAY_CATEGORIES.length + ARTWORK_CATEGORIES.length)) |
+//         0;
 
-    if (data.remaining <= 0 && data.resetsIn > now) {
-        switch (mode) {
-            case "sleep":
-                await new Promise((resolve) =>
-                    setTimeout(resolve, data.resetsIn - now),
-                );
-                return;
-            case "throw":
-                throw Error("You are being ratelimited");
-        }
-    }
+//     if (idx < ARTWORK_CATEGORIES.length) {
+//         return ARTWORK_CATEGORIES[idx];
+//     }
 
-    --data.remaining;
-}
+//     return ROLEPLAY_CATEGORIES[idx - ARTWORK_CATEGORIES.length];
+// }
+
+// async function handleRatelimit(mode: RatelimitHandleMode, data: RatelimitData) {
+//     const now = Date.now();
+
+//     if (data.remaining <= 0 && data.resetsIn > now) {
+//         switch (mode) {
+//             case "sleep":
+//                 await new Promise((resolve) =>
+//                     setTimeout(resolve, data.resetsIn - now),
+//                 );
+//                 return;
+//             case "throw":
+//                 throw Error("You are being ratelimited");
+//         }
+//     }
+
+//     --data.remaining;
+// }
