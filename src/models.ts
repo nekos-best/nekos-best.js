@@ -1,7 +1,14 @@
-export interface GetCategory<T extends Asset = Asset> {
-    results: T[];
+export interface FetchAssets<E extends Asset = Asset> {
+    results: E[];
 }
 
+/**
+ * A generic asset returned by the API.
+ *
+ * The class isn't very useful on its own. You are expected to use the `is*` type
+ * guard methods to access subclass properties or to use the more specialized
+ * `<Client>.fetch*Assets` methods.
+ */
 export class Asset {
     /**
      * @param url The direct URL to the image.
@@ -14,7 +21,7 @@ export class Asset {
     ) {}
 
     /**
-     * Ensures this asset is `ArtworkAsset`.
+     * Ensure this asset is `ArtworkAsset`.
      *
      * This method can be used as a type guard in TypeScript.
      */
@@ -23,7 +30,7 @@ export class Asset {
     }
 
     /**
-     * Ensures this asset is `RoleplayAsset`.
+     * Ensure this asset is `RoleplayAsset`.
      *
      * This method can be used as a type guard in TypeScript.
      */
@@ -40,12 +47,14 @@ export class Asset {
 export class ArtworkAsset extends Asset {
     /**
      * @param artist The artist that created the image.
+     * @param sourceUrl The place where the image was obtained from.
      * @hideconstructor
      */
     constructor(
         url: string,
         dimensions: Dimensions,
         public artist: Artist,
+        public sourceUrl: string,
     ) {
         super(url, dimensions);
     }
