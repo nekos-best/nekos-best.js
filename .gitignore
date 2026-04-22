@@ -5,7 +5,7 @@
 
 !.gitignore
 !LICENSE
-!MIGRATION.md
+!CHANGELOG.md
 !README.md
 !bun.lock
 !package.json
