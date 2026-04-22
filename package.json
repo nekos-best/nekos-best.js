@@ -1,51 +1,49 @@
 {
     "name": "nekos-best.js",
-    "version": "6.5.3",
+    "version": "7.0.0",
     "author": "Thund (https://github.com/thund-x)",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/nekos-best/nekos-best.js.git"
     },
+    "type": "module",
+    "private": true,
     "devDependencies": {
-        "@types/node": "^22.19.17",
-        "esbuild": "^0.25.12",
+        "@types/node": "^24.15.0",
         "typescript": "^5.9.3"
     },
     "exports": {
-        "import": {
-            "types": "./index.d.ts",
-            "default": "./index.mjs"
-        },
-        "require": {
-            "types": "./index.d.ts",
-            "default": "./index.js"
+        ".": {
+            "module": "./dist/index.js",
+            "types": "./dist/index.d.ts"
         }
     },
     "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
     "contributors": [
-        "oriel-beck (https://github.com/oriel-beck)",
-        "Thusuzzee (https://github.com/Thusuzzee)"
+        "Thusuzzee (https://github.com/Thusuzzee)",
+        "oriel-beck (https://github.com/oriel-beck)"
     ],
     "description": "The official JavaScript wrapper for the https://nekos.best API with TypeScript typings.",
     "engines": {
-        "node": ">=22"
+        "node": ">=24.15.0"
     },
     "files": [
-        "index.*"
+        "LICENSE",
+        "MIGRATION.md",
+        "README.md",
+        "dist"
     ],
     "keywords": [
-        "nekos",
-        "neko",
         "api",
-        "wrapper",
+        "neko",
+        "nekos",
         "roleplay",
-        "rp"
+        "rp",
+        "wrapper"
     ],
     "license": "MIT",
     "scripts": {
-        "build": "bunx esbuild index.ts --outfile=index.js --platform=node --format=cjs --target=esnext",
-        "types": "bunx tsc --emitDeclarationOnly",
-        "prepack": "bun run build && bun run types"
-    },
-    "types": "index.d.ts"
+        "build": "tsc",
+        "prepack": "bun run build"
+    }
 }

@@ -1,15 +1,14 @@
 {
     "compilerOptions": {
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
         "alwaysStrict": true,
-        "skipLibCheck": true,
         "declaration": true,
+        "declarationMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "NodeNext",
+        "outDir": "dist",
+        "moduleResolution": "nodenext",
+        "skipLibCheck": true,
         "strict": true,
-        "module": "commonjs",
-        "target": "esnext",
-        "types": [
-            "node"
-        ]
-    }
+        "target": "ES2022",
+    },
 }
