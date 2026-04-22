@@ -1,6 +1,9 @@
 ## Migrate from 6.X.X to 7.X.X
 
-- `nekos-best.js` has become an ESM-only library. If you use supported node.js versions, no changes are necessary.
+- `nekos-best.js` has become an ESM-only library. Packages using CommonJS
+  modules will need to be migrated to ESM modules to use this version. Deno
+  provides [a migration guide](https://deno.com/blog/convert-cjs-to-esm) to help
+  you to transition.
 
 ## Migrate from 5.X.X to 6.X.X
 

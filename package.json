@@ -12,12 +12,8 @@
         "@types/node": "^24.15.0",
         "typescript": "^5.9.3"
     },
-    "exports": {
-        ".": {
-            "module": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        }
-    },
+    "exports": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
     "contributors": [
         "Thusuzzee (https://github.com/Thusuzzee)",

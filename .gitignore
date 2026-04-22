@@ -10,3 +10,4 @@
 !bun.lock
 !package.json
 !tsconfig.json
+!tsconfig.*.json
