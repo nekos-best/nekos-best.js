@@ -3,9 +3,27 @@
 - `nekos-best.js` has become an ESM-only library. Packages using CommonJS
   modules will need to be migrated to ESM modules to use this version. Deno
   provides [a migration guide](https://deno.com/blog/convert-cjs-to-esm) to help
-  you to transition.
+  you to migrate.
 
-- `NbEndpointMetadata` has been removed. Use the static properties `artworkCategories`, `roleplayCategories`, and `categories` of the `Client` class to obtain all categories.
+- `NbEndpointMetadata` has been removed. Use the static properties `artworkCategories`, `roleplayCategories`, or `categories` of the `Client` class to obtain categories.
+
+- `NbCategories` has been renamed to `Categories`. Additionally, two more specific union types are exported; namely `ArtworkCategories` and `RoleplayCategories`.
+
+- `NbIndividualResponse` has been removed in favor of `Asset`, `ArtworkAsset` and `RoleplayAsset` classes with stronger types.
+
+- `NbResponse` has been replaced by `GetCategory<T extends Asset = Asset>` to accommodate for the new client methods.
+
+- `NbBufferResponse` has been removed with no replacement. `<Client>.fetchFile` is still available, albeit with a different signature (see below).
+
+- *TODO: Describe fetchFile replacement*.
+
+- `ClientOptions` has been removed due to `RatelimitHandleMode` removal (see below).
+
+- `RatelimitHandleMode` will always be set to "sleep" mode. Client methods now accept an `AbortSignal` to abort requests if they take too long.
+
+- `<Client>.fetch` has been renamed to `<Client>.fetchAssets`.
+
+- `fetchRandom` top-level-function has been removed. Replace it with the one-liner `new Client().fetchAssets(category, 1)`.
 
 ## Migrate from 5.X.X to 6.X.X
 

@@ -8,8 +8,6 @@ export { Client } from "./client.js";
 
 export * from "./models.js";
 
-// import { ROLEPLAY_CATEGORIES, ARTWORK_CATEGORIES } from "./categories.js";
-
 // interface RatelimitData {
 //     remaining: number;
 //     resetsIn: number;
@@ -17,63 +15,8 @@ export * from "./models.js";
 
 // type Nullable<T> = T | undefined | null;
 
-// export type NbCategories =
-//     | (typeof ROLEPLAY_CATEGORIES)[number]
-//     | (typeof ARTWORK_CATEGORIES)[number];
-
-// /** @deprecated This will be removed in the next major version */
-// export type NbEndpointMetadata = Record<
-//     string,
-//     {
-//         format: string;
-//         min: string;
-//         max: string;
-//     }
-// >;
-
-// // NbResponse was taken :(
-// export type NbIndividualResponse = {
-//     anime_name?: string;
-//     artist_href?: string;
-//     artist_name?: string;
-//     dimensions: {
-//         width: number;
-//         height: number;
-//     };
-//     source_url?: string;
-//     url: string;
-// };
-
-// export type NbResponse = { results: NbIndividualResponse[] };
-// export type NbBufferResponse = NbIndividualResponse & { data: Buffer };
-
-// export type RatelimitHandleMode = "sleep" | "throw";
-
-// export interface ClientOptions {
-//     ratelimitHandleMode: RatelimitHandleMode;
-// }
-
-// /**
-//  * A quick function to fetch a random file URL along with its metadata (if available).
-//  *
-//  * If you are going to call this function multiple times, it's better to initialize a new `Client` instead.
-//  *
-//  * @param category The category to fetch the file URL from. If omitted, it picks a random category.
-//  */
-// export async function fetchRandom(category?: NbCategories) {
-//     return new Client().fetch(category, 1);
-// }
-
 // export class Client {
 //     #ratelimitData: RatelimitData | null = null;
-//     #clientOptions: ClientOptions;
-
-//     constructor(clientOptions?: Partial<NbBufferResponse>) {
-//         this.#clientOptions = {
-//             ratelimitHandleMode: "sleep",
-//             ...clientOptions,
-//         };
-//     }
 
 //     /**
 //      * Fetch and download a random file with its metadata (if available).

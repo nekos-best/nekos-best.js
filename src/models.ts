@@ -1,3 +1,7 @@
+export interface GetCategory<T extends Asset = Asset> {
+    results: T[];
+}
+
 export class Asset {
     /**
      * @param url The direct URL to the image.
