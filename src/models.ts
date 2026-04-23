@@ -2,6 +2,10 @@ export interface FetchAssets<E extends Asset = Asset> {
     results: E[];
 }
 
+export interface SearchAssets<E extends Asset = Asset> {
+    results: E[];
+}
+
 /**
  * A generic asset returned by the API.
  *

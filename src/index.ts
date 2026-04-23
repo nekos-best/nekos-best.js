@@ -1,8 +1,4 @@
-export {
-    ArtworkCategories,
-    RoleplayCategories,
-    Categories,
-} from "./categories.js";
+export { ArtworkCategory, RoleplayCategory, Category } from "./categories.js";
 
 export { Client } from "./client.js";
 

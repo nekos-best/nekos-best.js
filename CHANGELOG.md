@@ -15,9 +15,9 @@ support of ESM modules. See below for more details.
   `artworkCategories`, `roleplayCategories`, or `categories` of the `Client`
   class to obtain categories.
 
-3. (!) `NbCategories` has been renamed to `Categories`. Additionally, two more
-  specific union types are exported; namely `ArtworkCategories` and
-  `RoleplayCategories`.
+3. (!) `NbCategories` has been renamed to `Category`. Additionally, two more
+  specific union types are exported; namely `ArtworkCategory` and
+  `RoleplayCategory`.
 
 4. (!) `NbIndividualResponse` has been removed in favor of the `Asset`,
   `ArtworkAsset` and `RoleplayAsset` classes with stronger types. Refer to the
@@ -53,6 +53,9 @@ support of ESM modules. See below for more details.
 
 13. Two new methods named `<Client>.fetchArtworkAssets` and
     `<Client>.fetchRoleplayAssets` have been added with stronger types.
+
+14. `<Client>.search` has been split into two methods:
+    `<Client>.searchArtworkAssets` and `<Client>.searchRoleplayAssets`.
 
 ## 6.0.0
 

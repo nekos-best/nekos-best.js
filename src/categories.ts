@@ -1,4 +1,4 @@
-export type ArtworkCategories = (typeof ARTWORK_CATEGORIES)[number];
+export type ArtworkCategory = (typeof ARTWORK_CATEGORIES)[number];
 export const ARTWORK_CATEGORIES = Object.freeze([
     "kitsune",
     "neko",
@@ -6,7 +6,7 @@ export const ARTWORK_CATEGORIES = Object.freeze([
     "waifu",
 ] as const);
 
-export type RoleplayCategories = (typeof ROLEPLAY_CATEGORIES)[number];
+export type RoleplayCategory = (typeof ROLEPLAY_CATEGORIES)[number];
 export const ROLEPLAY_CATEGORIES = Object.freeze([
     "angry",
     "baka",
@@ -69,7 +69,7 @@ export const ROLEPLAY_CATEGORIES = Object.freeze([
     "yeet",
 ] as const);
 
-export type Categories = (typeof CATEGORIES)[number];
+export type Category = (typeof CATEGORIES)[number];
 export const CATEGORIES = Object.freeze([
     ...ARTWORK_CATEGORIES,
     ...ROLEPLAY_CATEGORIES,
