@@ -1,7 +1,7 @@
 {
     "excludeInternal": true,
     "includeVersion": true,
-    "gitRevision": "branch",
+    "gitRevision": "{branch}",
     "plugin": [
         "typedoc-github-theme"
     ]

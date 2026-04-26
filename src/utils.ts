@@ -33,3 +33,7 @@ export function assertStringLengthInRange(min: number, x: string, max: number) {
         throw new Error(`"${x}" must be at most ${max} character(s) long`);
     }
 }
+
+export async function sleepAsync(ms: number) {
+    return new Promise(res => setTimeout(res, ms))
+}

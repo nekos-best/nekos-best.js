@@ -19,7 +19,7 @@ export class Asset {
     /**
      * The direct URL to the asset's image.
      *
-     * @see {@link Client#downloadAsset} To download the image itself.
+     * @see {@link Client#downloadAsset} to download the image itself.
      */
     public url: string;
 
