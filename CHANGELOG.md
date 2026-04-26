@@ -34,90 +34,53 @@ support of ESM modules. See below for more details.
   `<Client>.fetchFile` is still available, albeit with a different signature
   (see below).
 
-7. (!) *TODO: Describe fetchFile replacement*.
+7. XXX
 
-8. (!) `ClientOptions` and therefore the single `Client` constructor argument
+ <!-- TODO: Describe `fetchFile` replacement*. -->
+
+1. (!) `ClientOptions` and therefore the single `Client` constructor argument
    has been removed for now due to `RatelimitHandleMode` removal (see below).
 
-9. (!) `RatelimitHandleMode` will always be set to "sleep" mode, that is,
+2. (!) `RatelimitHandleMode` will always be set to "sleep" mode, that is,
    methods that call the API will indefinitely wait until the API returns a 2XX
    or a 5XX response. If that is undesirable to you, see 11.
 
-10. (!) The `fetchRandom` top-level-function has been removed. Replace it with the
+3. (!) The `fetchRandom` top-level-function has been removed. Replace it with the
   one-liner `new Client().fetchAssets(category, 1)`.
 
-11. Client methods now accept an `AbortSignal` to abort requests if they take
+4. Client methods now accept an `AbortSignal` to abort requests if they take
     too long.
 
-12. (!) `<Client>.fetch` has been renamed to `<Client>.fetchAssets`.
+5. (!) `<Client>.fetch` has been renamed to `<Client>.fetchAssets`.
 
-13. Two new methods named `<Client>.fetchArtworkAssets` and
+6. Two new methods named `<Client>.fetchArtworkAssets` and
     `<Client>.fetchRoleplayAssets` have been added with stronger types.
 
-14. `<Client>.search` has been split into two methods:
+7. `<Client>.search` has been split into two methods:
     `<Client>.searchArtworkAssets` and `<Client>.searchRoleplayAssets`.
 
 ## 6.0.0
 
-*Changelog unavailable*
+Changelog is unavailable
 
 ### Migrate from 5.X.X
 
-**Deprecation notice: The TypeScript type `NbEndpointMetadata` will be removed in the 7.X.X version due to recent API changes**
+**Deprecation notice: Type `NbEndpointMetadata` will be removed in
+the 7.X.X version due to recent API changes**
 
-#### `<Client>.fetchRandom()` & `<Client>.fetchMultiple()` methods have been removed in favor of the `<Client>.fetch(category, amount)` method
-
-```diff
-const nekosBest = new Client();
-
-- nekosBest.fetchRandom("neko")
-+ nekosBest.fetch("neko", 1)
-```
-
-```diff
-const nekosBest = new Client();
-
-- nekosBest.fetchMultiple("neko", 15)
-+ nekosBest.fetch("neko", 15)
-```
-
-#### The `<Client>.init()` method has been removed
-
-```diff
-const nekosBest = new Client();
-
-- await nekosBest.init();
-```
+1. `<Client>.fetchRandom()` & `<Client>.fetchMultiple()` methods have been removed
+    in favor of the `<Client>.fetch(category, amount)` method.
+2. The `<Client>.init()` method has been removed.
 
 ## 5.0.0
 
-*Changelog unavailable*
+Changelog unavailable
 
-#### Migrate from 4.X.X
+### Migrate from 4.X.X
 
-#### The `fetchNeko(category)` function has been removed in favor of the `<Client>.fetchRandom()` method and its shortcut `fetchRandom()`
-
-```diff
-- fetchNeko('category')
-+ const nekosBest = new Client();
-+
-+ nekosBest.fetchRandom('category')
-```
-
-```diff
-- fetchNeko('category')
-+ fetchRandom('category')
-```
-
-#### The optional parameter `amount` of the `fetchNeko()` function has been removed in favor of the `<Client>.fetchMultiple()` method
-
-```diff
-- fetchNeko('category', 15)
-+ const nekosBest = new Client();
-+
-+ nekosBest.fetchMultiple('category', 15)
-```
-
-#### Other Changes
-
-- The optional options `max` and `min` of the `fetchNeko()` function have been removed
+1. The `fetchNeko(category)` function has been removed in favor of the
+    `<Client>.fetchRandom()` method and its shortcut `fetchRandom()`.
+2. The optional parameter `amount` of the `fetchNeko()` function has been
+    removed in favor of the `<Client>.fetchMultiple()` method.
+3. The optional options `max` and `min` of the `fetchNeko()` function have been
+    removed.

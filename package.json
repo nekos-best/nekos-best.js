@@ -9,7 +9,8 @@
     "type": "module",
     "private": true,
     "devDependencies": {
-        "@types/node": "^24.15.0",
+        "@types/node": "^24.10.3",
+        "typedoc": "^0.28.19",
         "typescript": "^5.9.3"
     },
     "exports": "./dist/index.js",
@@ -40,6 +41,7 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc",
+        "build:docs": "typedoc",
         "prepack": "bun run build"
     }
 }

@@ -5,7 +5,8 @@ import {
     ROLEPLAY_CATEGORIES,
     ArtworkCategory,
     RoleplayCategory,
-} from "./categories.js";
+} from "./constants.js";
+import { DEFAULT_FETCH_AMOUNT, DEFAULT_SEARCH_AMOUNT, MAX_FETCH_AMOUNT, MAX_SEARCH_AMOUNT, MAX_SEARCH_QUERY_LEN, MIN_FETCH_AMOUNT, MIN_SEARCH_AMOUNT, MIN_SEARCH_QUERY_LEN } from "./constants.js";
 import { SearchByCategory } from "./models-internal.js";
 import {
     ArtworkAsset,
@@ -21,28 +22,28 @@ import {
     pickElement,
 } from "./utils.js";
 
-const MIN_FETCH_AMOUNT = 1;
-const MAX_FETCH_AMOUNT = 20;
 
-const MIN_SEARCH_AMOUNT = 1;
-const MAX_SEARCH_AMOUNT = 25;
-
-const MIN_SEARCH_QUERY_LEN = 3;
-const MAX_SEARCH_QUERY_LEN = 150;
-
+/**
+ * HTTP client for the {@link https://nekos.best} v2 API.
+ */
 export class Client {
-    /** Categories that contain artwork assets. */
-    public static artworkCategories = ARTWORK_CATEGORIES;
-
-    /** Categories that contain roleplay assets. */
-    public static roleplayCategories = ROLEPLAY_CATEGORIES;
-
-    /** All categories of the API. */
-    public static categories = CATEGORIES;
-
+    /**
+    * Fetch random assets.
+    *
+    * @param category Request assets from a specific category. Set to `null` to select a random category.
+    * @param amount The amount of assets to request from the API. Less assets may be returned 
+    *   than the specified amount if a category has a small collection. 
+    *
+    *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}. 
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    * @returns A collection of assets.
+    *
+    * @see {@link Client#fetchArtworkAssets} To fetch artwork assets with a stronger type.
+    * @see {@link Client#fetchRoleplayAssets} To fetch roleplay assets with a stronger type.
+    */
     public async fetchAssets(
         category: Category | null,
-        amount = 1,
+        amount = DEFAULT_FETCH_AMOUNT,
         abortSignal?: AbortSignal,
     ): Promise<FetchAssets<Asset>> {
         if (category) {
@@ -51,14 +52,26 @@ export class Client {
             category = pickElement(CATEGORIES);
         }
 
-        assertInRange(MIN_FETCH_AMOUNT, amount, MAX_FETCH_AMOUNT);
-
         return this.#fetchAssets(category, amount, abortSignal);
     }
 
+    /**
+    * Fetch random artwork assets.
+    *
+    * @param category Request assets from a specific category. Set to `null` to select a random category.
+    * @param amount The amount of assets to request from the API. Less assets may be returned 
+    *   than the specified amount if a category has a small collection. 
+    *
+    *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    * @returns A collection of artwork assets.
+    *
+    * @see {@link Client#fetchAssets} To fetch assets with a more generic type.
+    * @see {@link Client#fetchRoleplayAssets} To fetch roleplay assets instead.
+    */
     public async fetchArtworkAssets(
         category: ArtworkCategory | null,
-        amount = 1,
+        amount = DEFAULT_FETCH_AMOUNT,
         abortSignal?: AbortSignal,
     ): Promise<FetchAssets<ArtworkAsset>> {
         if (category) {
@@ -67,16 +80,28 @@ export class Client {
             category = pickElement(ARTWORK_CATEGORIES);
         }
 
-        assertInRange(MIN_FETCH_AMOUNT, amount, MAX_FETCH_AMOUNT);
-
         return this.#fetchAssets(category, amount, abortSignal) as Promise<
             FetchAssets<ArtworkAsset>
         >;
     }
 
+    /**
+    * Fetch random roleplay assets.
+    *
+    * @param category Request assets from a specific category. Set to `null` to select a random category.
+    * @param amount The amount of assets to request from the API. Less assets may be returned 
+    *   than the specified amount if a category has a small collection. 
+    *
+    *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    * @returns A collection of roleplay assets.
+    *
+    * @see {@link Client#fetchAssets} To fetch assets with a more generic type.
+    * @see {@link Client#fetchArtworkAssets} To fetch artwork assets instead.
+    */
     public async fetchRoleplayAssets(
         category: RoleplayCategory | null,
-        amount = 1,
+        amount = DEFAULT_FETCH_AMOUNT,
         abortSignal?: AbortSignal,
     ): Promise<FetchAssets<RoleplayAsset>> {
         if (category) {
@@ -85,26 +110,32 @@ export class Client {
             category = pickElement(ROLEPLAY_CATEGORIES);
         }
 
-        assertInRange(MIN_FETCH_AMOUNT, amount, MAX_FETCH_AMOUNT);
 
         return this.#fetchAssets(category, amount, abortSignal) as Promise<
             FetchAssets<RoleplayAsset>
         >;
     }
 
+    /**
+    * Search artwork assets.
+    *
+    * @param query The query to search against the API. It must be between {@link MIN_SEARCH_QUERY_LEN} and {@link MAX_SEARCH_QUERY_LEN} characters.
+    * @param category Limit search to assets from a specific category. Set to `null` to search in all artwork categories.
+    * @param amount The amount of assets to request from the API. Less assets may be returned 
+    *   than the specified amount if a category has a small collection. 
+    *
+    *   It must be between {@link MIN_SEARCH_AMOUNT} and {@link MAX_SEARCH_AMOUNT}. Defaults to {@link DEFAULT_SEARCH_AMOUNT}.
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    * @returns A collection of artwork assets.
+    *
+    * @see {@link Client#searchRoleplayAssets} To search for roleplay assets instead.
+    */
     public async searchArtworkAssets(
         query: string,
         category: ArtworkCategory | null,
-        amount = 1,
+        amount = DEFAULT_SEARCH_AMOUNT,
         abortSignal?: AbortSignal,
     ): Promise<SearchAssets<ArtworkAsset>> {
-        assertInRange(MIN_SEARCH_AMOUNT, amount, MAX_SEARCH_AMOUNT);
-        assertStringLengthInRange(
-            MIN_SEARCH_QUERY_LEN,
-            query,
-            MAX_SEARCH_QUERY_LEN,
-        );
-
         if (category) {
             assertInArray(category, ARTWORK_CATEGORIES);
 
@@ -124,19 +155,26 @@ export class Client {
         }
     }
 
+    /**
+    * Search roleplay assets.
+    *
+    * @param query The query to search against the API. It must be between {@link MIN_SEARCH_QUERY_LEN} and {@link MAX_SEARCH_QUERY_LEN} characters.
+    * @param category Limit search to assets from a specific category. Set to `null` to search in all roleplay categories.
+    * @param amount The amount of assets to request from the API. Less assets may be returned 
+    *   than the specified amount if a category has a small collection. 
+    *
+    *   It must be between {@link MIN_SEARCH_AMOUNT} and {@link MAX_SEARCH_AMOUNT}. Defaults to {@link DEFAULT_SEARCH_AMOUNT}.
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    * @returns A collection of roleplay assets.
+    *
+    * @see {@link Client#searchArtworkAssets} To search for artwork assets instead.
+    */
     public async searchRoleplayAssets(
         query: string,
         category: RoleplayCategory | null,
         amount = 1,
         abortSignal?: AbortSignal,
     ): Promise<SearchAssets<RoleplayAsset>> {
-        assertInRange(MIN_SEARCH_AMOUNT, amount, MAX_SEARCH_AMOUNT);
-        assertStringLengthInRange(
-            MIN_SEARCH_QUERY_LEN,
-            query,
-            MAX_SEARCH_QUERY_LEN,
-        );
-
         if (category) {
             assertInArray(category, ROLEPLAY_CATEGORIES);
 
@@ -156,6 +194,15 @@ export class Client {
         }
     }
 
+    /**
+    * Download an asset's image as a stream.
+    *
+    * @param url The direct URL to the image.
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    *
+    * @see {@link Client#downloadAsset} To download the asset directly to a blob.
+    * @see {@link Asset#url} To access an asset's image.
+    */
     public async downloadStreamAsset(
         url: string,
         abortSignal?: AbortSignal,
@@ -163,6 +210,15 @@ export class Client {
         throw 1;
     }
 
+    /**
+    * Download an asset's image as a blob.
+    *
+    * @param url The direct URL to the image.
+    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+    *
+    * @see {@link Client#downloadStreamAsset} To download the asset as a stream instead.
+    * @see {@link Asset#url} To access an asset's image.
+    */
     public async downloadAsset(
         url: string,
         abortSignal?: AbortSignal,
@@ -175,6 +231,8 @@ export class Client {
         amount: number,
         abortSignal?: AbortSignal,
     ): Promise<FetchAssets<Asset>> {
+        assertInRange(MIN_FETCH_AMOUNT, amount, MAX_FETCH_AMOUNT);
+
         throw 1;
     }
 
@@ -184,6 +242,13 @@ export class Client {
         amount: number,
         abortSignal?: AbortSignal,
     ): Promise<SearchAssets<Asset>> {
+        assertInRange(MIN_SEARCH_AMOUNT, amount, MAX_SEARCH_AMOUNT);
+        assertStringLengthInRange(
+            MIN_SEARCH_QUERY_LEN,
+            query,
+            MAX_SEARCH_QUERY_LEN,
+        );
+
         throw 1;
     }
 
@@ -193,6 +258,13 @@ export class Client {
         amount: number,
         abortSignal?: AbortSignal,
     ): Promise<SearchAssets<Asset>> {
+        assertInRange(MIN_SEARCH_AMOUNT, amount, MAX_SEARCH_AMOUNT);
+        assertStringLengthInRange(
+            MIN_SEARCH_QUERY_LEN,
+            query,
+            MAX_SEARCH_QUERY_LEN,
+        );
+
         throw 1;
     }
 }

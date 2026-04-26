@@ -1,42 +1,51 @@
+/**
+ * Response type of {@link Client#fetchAssets}, {@link Client#fetchArtworkAssets}, and {@link Client#fetchRoleplayAssets}.
+ */
 export interface FetchAssets<E extends Asset = Asset> {
     results: E[];
 }
 
+/**
+ * Response type of {@link Client#searchArtworkAssets}, and {@link Client#searchRoleplayAssets}.
+ */
 export interface SearchAssets<E extends Asset = Asset> {
     results: E[];
 }
 
 /**
- * A generic asset returned by the API.
- *
- * The class isn't very useful on its own. You are expected to use the `is*` type
- * guard methods to access subclass properties or to use the more specialized
- * `<Client>.fetch*Assets` methods.
+ * A generic asset.
  */
 export class Asset {
     /**
-     * @param url The direct URL to the image.
-     * @param dimensions The dimensions of the image.
-     * @hideconstructor
+     * The direct URL to the asset's image.
+     *
+     * @see {@link Client#downloadAsset} To download the image itself.
      */
+    public url: string;
+
+    /*
+     * The dimensions of the asset's image.
+     */
+    public dimensions: Dimensions;
+
+    /** @hideconstructor */
     constructor(
-        public url: string,
-        public dimensions: Dimensions,
-    ) {}
+        url: string,
+        dimensions: Dimensions,
+    ) {
+        this.dimensions = dimensions;
+        this.url = url;
+    }
 
     /**
-     * Ensure this asset is `ArtworkAsset`.
-     *
-     * This method can be used as a type guard in TypeScript.
+     * Assert `this` is {@link ArtworkAsset}.
      */
     public isArtwork(): this is ArtworkAsset {
         return this instanceof ArtworkAsset;
     }
 
     /**
-     * Ensure this asset is `RoleplayAsset`.
-     *
-     * This method can be used as a type guard in TypeScript.
+     * Assert `this` is {@link RoleplayAsset}.
      */
     public isRoleplay(): this is RoleplayAsset {
         return this instanceof RoleplayAsset;
@@ -44,42 +53,49 @@ export class Asset {
 }
 
 /**
- * An asset that was created by an artist.
+ * An artwork asset. It features content that was created by a human artist.
  *
  * The API returns these assets from categories with the "png" format.
  */
 export class ArtworkAsset extends Asset {
-    /**
-     * @param artist The artist that created the image.
-     * @param sourceUrl The place where the image was obtained from.
-     * @hideconstructor
-     */
+    /** The artist that created the asset's image */
+    public artist: Artist;
+
+    /** The place where the image was obtained from. */
+    public sourceUrl: string;
+
+    /** @hideconstructor */
     constructor(
         url: string,
         dimensions: Dimensions,
-        public artist: Artist,
-        public sourceUrl: string,
+        artist: Artist,
+        sourceUrl: string,
     ) {
         super(url, dimensions);
+
+        this.artist = artist;
+        this.sourceUrl = sourceUrl;
     }
 }
 
 /**
- * An asset that features a clip from an anime.
+ * A roleplay asset. It features a clip from an anime.
  *
  * The API returns these assets from categories with the "gif" format.
  */
 export class RoleplayAsset extends Asset {
-    /**
-     * @param anime The anime that this image was taken from.
-     * @hideconstructor
-     */
+    /** The anime where this image was taken from. */
+    public anime: Anime;
+
+    /** @hideconstructor */
     constructor(
         url: string,
         dimensions: Dimensions,
-        public anime: Anime,
+        anime: Anime,
     ) {
         super(url, dimensions);
+
+        this.anime = anime;
     }
 }
 

@@ -1,5 +1,5 @@
 /**
- * Restricts the categories of which searching will take place.
+ * Restricts the categories the search will be performed in.
  */
 export enum SearchByCategory {
     Artwork = 1,

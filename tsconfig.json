@@ -6,6 +6,7 @@
         "forceConsistentCasingInFileNames": true,
         "module": "NodeNext",
         "outDir": "dist",
+        "rootDir": "src",
         "moduleResolution": "nodenext",
         "skipLibCheck": true,
         "strict": true,

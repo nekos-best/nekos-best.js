@@ -1,7 +1,5 @@
-export { ArtworkCategory, RoleplayCategory, Category } from "./categories.js";
-
 export { Client } from "./client.js";
-
+export * from "./constants.js";
 export * from "./models.js";
 
 // interface RatelimitData {
@@ -42,7 +40,7 @@ export * from "./models.js";
 //      * Refer to the documentation for more details: https://docs.nekos.best/api/endpoints.html#get-categoryamountx
 //      *
 //      * @param category Category of assets. Set to `null` to pick a random category.
-//      * @param amount The amount of assets. Refer to the documentation for the limits.
+//      * @param [amount=DEFAULT_FETCH_AMOUNT] The amount of assets. Refer to the documentation for the limits.
 //      */
 //     async fetch(
 //         category: Nullable<NbCategories> = null,
@@ -70,7 +68,7 @@ export * from "./models.js";
 //      *
 //      * @param query Search query.
 //      * @param category Category of assets. Set to `null` to pick a random category.
-//      * @param amount The amount of assets. Refer to the documentation for the limits.
+//      * @param [amount=DEFAULT_FETCH_AMOUNT] The amount of assets. Refer to the documentation for the limits.
 //      */
 //     async search(
 //         query: string,
