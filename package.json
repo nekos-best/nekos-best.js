@@ -6,15 +6,22 @@
         "type": "git",
         "url": "git+https://github.com/nekos-best/nekos-best.js.git"
     },
-    "type": "module",
-    "private": true,
     "devDependencies": {
         "@types/node": "^24.10.3",
         "typedoc": "^0.28.19",
+        "typedoc-github-theme": "^0.4.0",
         "typescript": "^5.9.3"
     },
-    "exports": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "exports": {
+        "./constants.js": {
+            "types": "./dist/constants.d.ts",
+            "import": "./dist/constants.js"
+        },
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
     "bugs": "https://github.com/nekos-best/nekos-best.js/issues",
     "contributors": [
         "Thusuzzee (https://github.com/Thusuzzee)",
@@ -39,9 +46,11 @@
         "wrapper"
     ],
     "license": "MIT",
+    "private": true,
     "scripts": {
         "build": "tsc",
         "build:docs": "typedoc",
         "prepack": "bun run build"
-    }
+    },
+    "type": "module"
 }

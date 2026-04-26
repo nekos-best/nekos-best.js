@@ -1,12 +1,10 @@
 import {
     ARTWORK_CATEGORIES,
-    Category,
     CATEGORIES,
     ROLEPLAY_CATEGORIES,
-    ArtworkCategory,
-    RoleplayCategory,
 } from "./constants.js";
 import { DEFAULT_FETCH_AMOUNT, DEFAULT_SEARCH_AMOUNT, MAX_FETCH_AMOUNT, MAX_SEARCH_AMOUNT, MAX_SEARCH_QUERY_LEN, MIN_FETCH_AMOUNT, MIN_SEARCH_AMOUNT, MIN_SEARCH_QUERY_LEN } from "./constants.js";
+import { ArtworkCategory, Category, RoleplayCategory } from "./index.js";
 import { SearchByCategory } from "./models-internal.js";
 import {
     ArtworkAsset,
@@ -24,7 +22,7 @@ import {
 
 
 /**
- * HTTP client for the {@link https://nekos.best} v2 API.
+ * HTTP client for the {@link https://nekos.best} API.
  */
 export class Client {
     /**

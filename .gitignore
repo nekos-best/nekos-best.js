@@ -11,3 +11,4 @@
 !package.json
 !tsconfig.json
 !tsconfig.*.json
+!typedoc.json

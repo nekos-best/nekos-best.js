@@ -7,6 +7,7 @@
       "devDependencies": {
         "@types/node": "^24.10.3",
         "typedoc": "^0.28.19",
+        "typedoc-github-theme": "^0.4.0",
         "typescript": "^5.9.3",
       },
     },
@@ -51,6 +52,8 @@
     "punycode.js": ["punycode.js@2.3.1", "", {}, "sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA=="],
 
     "typedoc": ["typedoc@0.28.19", "", { "dependencies": { "@gerrit0/mini-shiki": "^3.23.0", "lunr": "^2.3.9", "markdown-it": "^14.1.1", "minimatch": "^10.2.5", "yaml": "^2.8.3" }, "peerDependencies": { "typescript": "5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x || 5.9.x || 6.0.x" }, "bin": { "typedoc": "bin/typedoc" } }, "sha512-wKh+lhdmMFivMlc6vRRcMGXeGEHGU2g8a2CkPTJjJlwRf1iXbimWIPcFolCqe4E0d/FRtGszpIrsp3WLpDB8Pw=="],
+
+    "typedoc-github-theme": ["typedoc-github-theme@0.4.0", "", { "peerDependencies": { "typedoc": "~0.28.0" } }, "sha512-lo/hr4EFZxq0SsMGeAscKUzljIKFgrJf5fb4nOAJcqaiSShQv7kzwF6M1s2fVRvUyx6UsmD4zEb+MtKkbucYpg=="],
 
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
