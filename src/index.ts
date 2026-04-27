@@ -21,4 +21,3 @@ export type RoleplayCategory = (typeof ROLEPLAY_CATEGORIES)[number];
 
 /** {@link CATEGORIES} as a union type. */
 export type Category = (typeof CATEGORIES)[number];
-

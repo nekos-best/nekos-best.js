@@ -3,12 +3,13 @@
 !src
 !src/**
 
+!.editorconfig
 !.gitignore
-!LICENSE
 !CHANGELOG.md
+!LICENSE
 !README.md
 !bun.lock
 !package.json
-!tsconfig.json
 !tsconfig.*.json
+!tsconfig.json
 !typedoc.json
