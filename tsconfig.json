@@ -11,6 +11,6 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "ES2022",
-        "noImplicitOverride": true,
-    },
+        "noImplicitOverride": true
+    }
 }

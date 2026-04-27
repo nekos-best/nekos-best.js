@@ -35,5 +35,5 @@ export function assertStringLengthInRange(min: number, x: string, max: number) {
 }
 
 export async function sleepAsync(ms: number) {
-    return new Promise(res => setTimeout(res, ms))
+    return new Promise((res) => setTimeout(res, ms));
 }

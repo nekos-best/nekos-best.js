@@ -29,10 +29,7 @@ export class Asset {
     public dimensions: Dimensions;
 
     /** @hideconstructor */
-    constructor(
-        url: string,
-        dimensions: Dimensions,
-    ) {
+    constructor(url: string, dimensions: Dimensions) {
         this.dimensions = dimensions;
         this.url = url;
     }
@@ -88,11 +85,7 @@ export class RoleplayAsset extends Asset {
     public anime: Anime;
 
     /** @hideconstructor */
-    constructor(
-        url: string,
-        dimensions: Dimensions,
-        anime: Anime,
-    ) {
+    constructor(url: string, dimensions: Dimensions, anime: Anime) {
         super(url, dimensions);
 
         this.anime = anime;

@@ -4,51 +4,51 @@
  * @module constants.js
  */
 
-/** 
+/**
  * The minimum amount that can be specified in {@link .!Client#fetchAssets}, {@link .!Client#fetchArtworkAssets}, and {@link .!Client#fetchRoleplayAssets}.
  */
 export const MIN_FETCH_AMOUNT = 1;
 
-/** 
+/**
  * The maximum amount that can be specified in {@link .!Client#fetchAssets}, {@link .!Client#fetchArtworkAssets}, and {@link .!Client#fetchRoleplayAssets}.
  */
 export const MAX_FETCH_AMOUNT = 20;
 
-/** 
+/**
  * The default amount in {@link .!Client#fetchAssets}, {@link .!Client#fetchArtworkAssets}, and {@link .!Client#fetchRoleplayAssets}.
  */
 export const DEFAULT_FETCH_AMOUNT = 1;
 
-/** 
+/**
  * The minimum amount that can be specified in {@link .!Client#searchArtworkAssets}, and {@link .!Client#searchRoleplayAssets}.
  */
 export const MIN_SEARCH_AMOUNT = 1;
 
-/** 
+/**
  * The maximum amount that can be specified in {@link .!Client#searchArtworkAssets}, and {@link .!Client#searchRoleplayAssets}.
  */
 export const MAX_SEARCH_AMOUNT = 25;
 
-/** 
+/**
  * The default amount in {@link .!Client#searchArtworkAssets}, and {@link .!Client#searchRoleplayAssets}.
  */
 export const DEFAULT_SEARCH_AMOUNT = 5;
 
-/** 
+/**
  * The minimum length of the search query in {@link .!Client#searchArtworkAssets}, and {@link .!Client#searchRoleplayAssets}.
  */
 export const MIN_SEARCH_QUERY_LEN = 3;
 
-/** 
+/**
  * The maximum length of the search query in {@link .!Client#searchArtworkAssets}, and {@link .!Client#searchRoleplayAssets}.
  */
 export const MAX_SEARCH_QUERY_LEN = 150;
 
 /** Categories that contain artwork assets. */
 export const ARTWORK_CATEGORIES = Object.freeze([
+    "husbando",
     "kitsune",
     "neko",
-    "husbando",
     "waifu",
 ] as const);
 

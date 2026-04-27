@@ -1,7 +1,14 @@
 import {
     ARTWORK_CATEGORIES,
     CATEGORIES,
-    DEFAULT_FETCH_AMOUNT, DEFAULT_SEARCH_AMOUNT, MAX_FETCH_AMOUNT, MAX_SEARCH_AMOUNT, MAX_SEARCH_QUERY_LEN, MIN_FETCH_AMOUNT, MIN_SEARCH_AMOUNT, MIN_SEARCH_QUERY_LEN,
+    DEFAULT_FETCH_AMOUNT,
+    DEFAULT_SEARCH_AMOUNT,
+    MAX_FETCH_AMOUNT,
+    MAX_SEARCH_AMOUNT,
+    MAX_SEARCH_QUERY_LEN,
+    MIN_FETCH_AMOUNT,
+    MIN_SEARCH_AMOUNT,
+    MIN_SEARCH_QUERY_LEN,
     ROLEPLAY_CATEGORIES,
 } from "./constants.js";
 import { ArtworkCategory, Category, RoleplayCategory } from "./index.js";
@@ -21,7 +28,8 @@ import {
     sleepAsync,
 } from "./utils.js";
 
-const DIRECT_IMAGE_URL_RE = /^https?:\/{2}nekos\.best\/api\/v\d+\/\w+\/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}\.\w+/;
+const DIRECT_IMAGE_URL_RE =
+    /^https?:\/{2}nekos\.best\/api\/v\d+\/\w+\/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}\.\w+/;
 const DIRECT_IMAGE_QUOTA_KEY = "direct-file";
 const BASE_URL = "https://nekos.best/api/v2";
 
@@ -29,7 +37,7 @@ const BASE_URL = "https://nekos.best/api/v2";
  * HTTP client for the {@link https://nekos.best} API.
  */
 export class Client {
-    /** 
+    /**
      * This map holds pairs of quota keys and a tuple of (remaining requests, reset at timestamp).
      *
      * NOTE: The rate limiter isn't aware of HTTP verbs, i.e., GET and POST requests of the same quota key are considered the same.
@@ -37,19 +45,16 @@ export class Client {
     #ratelimitBuckets = new Map<string, [number, number]>();
 
     /**
-    * Fetch random assets.
-    *
-    * @param category Request assets from a specific category. Set to `null` to select a random category.
-    * @param amount The amount of assets to request from the API. Less assets may be returned 
-    *   than the specified amount if a category has a small collection. 
-    *
-    *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}. 
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    * @returns A collection of assets.
-    *
-    * @see {@link Client#fetchArtworkAssets} to fetch artwork assets with a stronger type.
-    * @see {@link Client#fetchRoleplayAssets} to fetch roleplay assets with a stronger type.
-    */
+     * Fetch random assets.
+     *
+     * @param category Request assets from a specific category. Set to `null` to select a random category.
+     * @param amount The amount of assets to request from the API. Less assets may be returned than the specified amount if a category has a small collection.
+     *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns A collection of assets.
+     * @see {@link Client#fetchArtworkAssets} to fetch artwork assets with a stronger type.
+     * @see {@link Client#fetchRoleplayAssets} to fetch roleplay assets with a stronger type.
+     */
     public async fetchAssets(
         category: Category | null,
         amount = DEFAULT_FETCH_AMOUNT,
@@ -65,19 +70,16 @@ export class Client {
     }
 
     /**
-    * Fetch random artwork assets.
-    *
-    * @param category Request assets from a specific category. Set to `null` to select a random category.
-    * @param amount The amount of assets to request from the API. Less assets may be returned 
-    *   than the specified amount if a category has a small collection. 
-    *
-    *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    * @returns A collection of artwork assets.
-    *
-    * @see {@link Client#fetchAssets} to fetch assets with a more generic type.
-    * @see {@link Client#fetchRoleplayAssets} to fetch roleplay assets instead.
-    */
+     * Fetch random artwork assets.
+     *
+     * @param category Request assets from a specific category. Set to `null` to select a random category.
+     * @param amount The amount of assets to request from the API. Less assets may be returned than the specified amount if a category has a small collection.
+     *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns A collection of artwork assets.
+     * @see {@link Client#fetchAssets} to fetch assets with a more generic type.
+     * @see {@link Client#fetchRoleplayAssets} to fetch roleplay assets instead.
+     */
     public async fetchArtworkAssets(
         category: ArtworkCategory | null,
         amount = DEFAULT_FETCH_AMOUNT,
@@ -95,19 +97,16 @@ export class Client {
     }
 
     /**
-    * Fetch random roleplay assets.
-    *
-    * @param category Request assets from a specific category. Set to `null` to select a random category.
-    * @param amount The amount of assets to request from the API. Less assets may be returned 
-    *   than the specified amount if a category has a small collection. 
-    *
-    *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    * @returns A collection of roleplay assets.
-    *
-    * @see {@link Client#fetchAssets} to fetch assets with a more generic type.
-    * @see {@link Client#fetchArtworkAssets} to fetch artwork assets instead.
-    */
+     * Fetch random roleplay assets.
+     *
+     * @param category Request assets from a specific category. Set to `null` to select a random category.
+     * @param amount The amount of assets to request from the API. Less assets may be returned than the specified amount if a category has a small collection.
+     *   It must be between {@link MIN_FETCH_AMOUNT} and {@link MAX_FETCH_AMOUNT}. Defaults to {@link DEFAULT_FETCH_AMOUNT}.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns A collection of roleplay assets.
+     * @see {@link Client#fetchAssets} to fetch assets with a more generic type.
+     * @see {@link Client#fetchArtworkAssets} to fetch artwork assets instead.
+     */
     public async fetchRoleplayAssets(
         category: RoleplayCategory | null,
         amount = DEFAULT_FETCH_AMOUNT,
@@ -119,26 +118,22 @@ export class Client {
             category = pickElement(ROLEPLAY_CATEGORIES);
         }
 
-
         return this.#getCategory(category, amount, abortSignal) as Promise<
             FetchAssets<RoleplayAsset>
         >;
     }
 
     /**
-    * Search artwork assets.
-    *
-    * @param query The query to search against the API. It must be between {@link MIN_SEARCH_QUERY_LEN} and {@link MAX_SEARCH_QUERY_LEN} characters.
-    * @param category Limit search to assets from a specific category. Set to `null` to search in all artwork categories.
-    * @param amount The amount of assets to request from the API. Less assets may be returned 
-    *   than the specified amount if a category has a small collection. 
-    *
-    *   It must be between {@link MIN_SEARCH_AMOUNT} and {@link MAX_SEARCH_AMOUNT}. Defaults to {@link DEFAULT_SEARCH_AMOUNT}.
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    * @returns A collection of artwork assets.
-    *
-    * @see {@link Client#searchRoleplayAssets} to search for roleplay assets instead.
-    */
+     * Search artwork assets.
+     *
+     * @param query The query to search against the API. It must be between {@link MIN_SEARCH_QUERY_LEN} and {@link MAX_SEARCH_QUERY_LEN} characters.
+     * @param category Limit search to assets from a specific category. Set to `null` to search in all artwork categories.
+     * @param amount The amount of assets to request from the API. Less assets may be returned than the specified amount if a category has a small collection.
+     *   It must be between {@link MIN_SEARCH_AMOUNT} and {@link MAX_SEARCH_AMOUNT}. Defaults to {@link DEFAULT_SEARCH_AMOUNT}.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns A collection of artwork assets.
+     * @see {@link Client#searchRoleplayAssets} to search for roleplay assets instead.
+     */
     public async searchArtworkAssets(
         query: string,
         category: ArtworkCategory | null,
@@ -165,19 +160,16 @@ export class Client {
     }
 
     /**
-    * Search roleplay assets.
-    *
-    * @param query The query to search against the API. It must be between {@link MIN_SEARCH_QUERY_LEN} and {@link MAX_SEARCH_QUERY_LEN} characters.
-    * @param category Limit search to assets from a specific category. Set to `null` to search in all roleplay categories.
-    * @param amount The amount of assets to request from the API. Less assets may be returned 
-    *   than the specified amount if a category has a small collection. 
-    *
-    *   It must be between {@link MIN_SEARCH_AMOUNT} and {@link MAX_SEARCH_AMOUNT}. Defaults to {@link DEFAULT_SEARCH_AMOUNT}.
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    * @returns A collection of roleplay assets.
-    *
-    * @see {@link Client#searchArtworkAssets} to search for artwork assets instead.
-    */
+     * Search roleplay assets.
+     *
+     * @param query The query to search against the API. It must be between {@link MIN_SEARCH_QUERY_LEN} and {@link MAX_SEARCH_QUERY_LEN} characters.
+     * @param category Limit search to assets from a specific category. Set to `null` to search in all roleplay categories.
+     * @param amount The amount of assets to request from the API. Less assets may be returned than the specified amount if a category has a small collection.
+     *   It must be between {@link MIN_SEARCH_AMOUNT} and {@link MAX_SEARCH_AMOUNT}. Defaults to {@link DEFAULT_SEARCH_AMOUNT}.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns A collection of roleplay assets.
+     * @see {@link Client#searchArtworkAssets} to search for artwork assets instead.
+     */
     public async searchRoleplayAssets(
         query: string,
         category: RoleplayCategory | null,
@@ -204,14 +196,14 @@ export class Client {
     }
 
     /**
-    * Download an asset's image as a stream.
-    *
-    * @param url The direct URL to the image.
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    *
-    * @see {@link Client#downloadAsset} to download the asset directly to a blob.
-    * @see {@link Asset#url} to access an asset's image.
-    */
+     * Download an asset's image as a stream.
+     *
+     * @param url The direct URL to the image.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns The asset's image as a stream.
+     * @see {@link Client#downloadAsset} to download the asset directly to a blob.
+     * @see {@link Asset#url} to access an asset's image.
+     */
     public async downloadStreamAsset(
         url: string,
         abortSignal?: AbortSignal,
@@ -220,7 +212,12 @@ export class Client {
             throw new Error(`Invalid asset URL "${url}"`);
         }
 
-        const response = await this.#fetch("GET", url, DIRECT_IMAGE_QUOTA_KEY, abortSignal);
+        const response = await this.#fetch(
+            "GET",
+            url,
+            DIRECT_IMAGE_QUOTA_KEY,
+            abortSignal,
+        );
 
         if (!response.body) {
             throw new Error("Response did not contain body");
@@ -230,14 +227,14 @@ export class Client {
     }
 
     /**
-    * Download an asset's image as a blob.
-    *
-    * @param url The direct URL to the image.
-    * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
-    *
-    * @see {@link Client#downloadStreamAsset} to download the asset as a stream instead.
-    * @see {@link Asset#url} to access an asset's image.
-    */
+     * Download an asset's image as a blob.
+     *
+     * @param url The direct URL to the image.
+     * @param abortSignal Optionally cancel this operation. It might still count towards your rate limit.
+     * @returns The asset's image as a stream.
+     * @see {@link Client#downloadStreamAsset} to download the asset as a stream instead.
+     * @see {@link Asset#url} to access an asset's image.
+     */
     public async downloadAsset(
         url: string,
         abortSignal?: AbortSignal,
@@ -246,7 +243,12 @@ export class Client {
             throw new Error(`Invalid asset URL "${url}"`);
         }
 
-        const response = await this.#fetch("GET", url, DIRECT_IMAGE_QUOTA_KEY, abortSignal);
+        const response = await this.#fetch(
+            "GET",
+            url,
+            DIRECT_IMAGE_QUOTA_KEY,
+            abortSignal,
+        );
 
         return await response.blob();
     }
@@ -302,11 +304,23 @@ export class Client {
         return this.#fetchJSON("GET", url, path, abortSignal);
     }
 
-    async #fetchJSON<T>(method: string, url: string, quotaKey: string, abortSignal?: AbortSignal): Promise<T> {
-        return await (await this.#fetch(method, url, quotaKey, abortSignal)).json();
+    async #fetchJSON<T>(
+        method: string,
+        url: string,
+        quotaKey: string,
+        abortSignal?: AbortSignal,
+    ): Promise<T> {
+        return await (
+            await this.#fetch(method, url, quotaKey, abortSignal)
+        ).json();
     }
 
-    async #fetch(method: string, url: string, quotaKey: string, abortSignal?: AbortSignal): Promise<Response> {
+    async #fetch(
+        method: string,
+        url: string,
+        quotaKey: string,
+        abortSignal?: AbortSignal,
+    ): Promise<Response> {
         while (true) {
             const rtQuota = this.#ratelimitBuckets.get(quotaKey);
             const now = Date.now();
@@ -318,7 +332,10 @@ export class Client {
                     this.#ratelimitBuckets.delete(quotaKey);
                 } else {
                     // Optimistically update remaining quota to rate limit concurrent calls.
-                    this.#ratelimitBuckets.set(quotaKey, [rtQuota[0] - 1, rtQuota[1]]);
+                    this.#ratelimitBuckets.set(quotaKey, [
+                        rtQuota[0] - 1,
+                        rtQuota[1],
+                    ]);
                 }
             }
 
@@ -332,22 +349,36 @@ export class Client {
             });
 
             if (response.ok) {
-                const remaining = Number(response.headers.get("x-rate-limit-remaining"));
-                const resetsAt = Date.parse(response.headers.get("x-rate-limit-reset") || "");
+                const remaining = Number(
+                    response.headers.get("x-rate-limit-remaining"),
+                );
+                const resetsAt = Date.parse(
+                    response.headers.get("x-rate-limit-reset") || "",
+                );
 
-                if (Number.isSafeInteger(remaining) && Number.isSafeInteger(resetsAt)) {
+                if (
+                    Number.isSafeInteger(remaining) &&
+                    Number.isSafeInteger(resetsAt)
+                ) {
                     this.#ratelimitBuckets.set(quotaKey, [remaining, resetsAt]);
                 }
 
                 return response;
             } else if (response.status == 429) {
-                const retryAfterSecs = Number(response.headers.get("Retry-After"));
+                const retryAfterSecs = Number(
+                    response.headers.get("Retry-After"),
+                );
 
                 if (!Number.isSafeInteger(retryAfterSecs)) {
-                    throw new Error("You are being rate limited (and the server didn't set Retry-After header)");
+                    throw new Error(
+                        "You are being rate limited (and the server didn't set Retry-After header)",
+                    );
                 } else {
                     // Our quota info was outdated (or non existent). At least set it now to prevent more 429 responses in other concurrent calls.
-                    this.#ratelimitBuckets.set(quotaKey, [0, Date.now() + retryAfterSecs * 1000]);
+                    this.#ratelimitBuckets.set(quotaKey, [
+                        0,
+                        Date.now() + retryAfterSecs * 1000,
+                    ]);
 
                     abortSignal?.throwIfAborted();
                     await sleepAsync(retryAfterSecs * 1000);
@@ -356,7 +387,9 @@ export class Client {
             } else {
                 const body = await response.text();
 
-                throw new Error(`Request "${method} ${url}" failed with status code ${response.status}: ${body}`);
+                throw new Error(
+                    `Request "${method} ${url}" failed with status code ${response.status}: ${body}`,
+                );
             }
         }
     }
